@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>CS-WebApps</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="css/style.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<hr />
+<p>tags:</p>
+<ul>
+<li>ASP.NET</li>
+<li>Core</li>
+<li>Web</li>
+<li>App</li>
+</ul>
+<hr />
+<h1 id="aspnet-core-razor-pages">ASP.NET Core Razor Pages</h1>
+<h3 id="structure">Structure</h3>
+<ul>
+<li><code>Pages</code>: Contains Razor pages and supporting files.</li>
+<li><code>wwwroot</code>: Contains static files such as HTML files, JS files, CSS files</li>
+<li><code>appSettings.json</code>: Contains configuration data such as connection strings</li>
+<li><code>Program.cs</code>: Contains the entry point for the program</li>
+<li><code>Startup.cs</code>: Contains code that configures app behavior, such as whether it requires conset for cookies</li>
+</ul>
+<p>Each razor page is a pair of files. A <code>*.cshtml</code> file that contains HTML markup mixed with C# code using Razor syntax. A <code>*.cshtml.cs</code> file that contains C# code that handles page events. Supporting files have names that begin with underscore</p>
+<h2 id="notes-on-layouts">Notes on Layouts</h2>
+<p>Common HTML structures are frequently used by many pages within an app. All the shared elements can be defined in a <code>_Layout.cshtml</code> file, which can then be referenced by any view used within the app. Layouts reduce duplicate code in views</p>
+<p>The layout defines a top level template for views in the app. Apps can define more than one layout with different views specifying different layouts. Razor views have a Layout property. Views specify a layout by setting the property.</p>
+<p>Every layout must call <code>@RenderBody()</code> - Wherever the call is placed the contents of the view will be rendered.</p>
+<h2 id="notes-on-sections">Notes on Sections</h2>
+<p>Layouts can optionally reference one or more sections by calling <code>@RenderSection()</code>. Sections provide a way to organize where certain page elements should be placed. Each call to RenderSection can specify whether that section is required or optional</p>
+<p><code>@RenderSection("Scripts", required: false)</code></p>
+<p>Individual views specify the content to be rendered within a section using the <code>@section</code> syntax. If a page or view defines a section it must be rendered or an error will occur</p>
+<pre><code>@section Scripts {
+    &lt;script type=&quot;text/javascript&quot; src=&quot;~/scripts/main.js&quot;&gt;&lt;/script&gt;
+}
+</code></pre>
+<p>By default, the body and all sections in a content page must all be rendered by the layout page. The razor view engine enforces this by tracking whether the body and each section have been rendered. The body and every section in a Razor page must be either rendered or ignored.</p>
+<h2 id="notes-on-shared-directives">Notes on Shared Directives</h2>
+<p>Views and pages can use Razor directives to import namespaces and use dependency injection. Directives shared by many views may be specified in a common <code>_ViewImports.cshtml</code> file</p>
+<p>A ViewImports file can be placed within any folder, in which case it will only be applied to pages or views within that folder and its subfolders. ViewImports files are processed starting at the root level and then for each folder leading up to the location of the page or view itself. ViewImports settings specified at the root level may be overridden at the folder level</p>
+<p>Suppose the root level <code>_ViewImports.cshtml</code> file includes...</p>
+<pre><code>  @model Model1 
+  @addTagHelper *, MyTagHelper1
+</code></pre>
+<p>Suppose a subfolder <code>_ViewImports.cshtml</code> file includes...</p>
+<pre><code>  @model Model2
+  @addTagHelper *, MyTagHelper2
+</code></pre>
+<p>Pages and views in the subfolder will have access to both Tag Helpers and the <code>Model2</code> model</p>
+<p>Tag helpers all run. The closest <code>@model</code> import to the view overrides any others. That is the behavior you see above. The closest <code>@inherits</code> import to the view overrides any others. <code>@using</code> imports all run; duplicates ignored. <code>@inject</code> imports run for each property; the closest one to the view overrides any others with the same name.</p>
+<h3 id="running-code-before-each-view">Running code before each view</h3>
+<p>Code that needs to run before each view or page should be placed in the <code>_ViewStart</code> file. The statements listed in the ViewStart are run before every full view (not layouts, and not partial views). Like ViewImports, ViewStart is heirarchial. ViewImports and ViewStarts not usually placed in Shared folders</p>
+<h2 id="notes-on-dependency-injection">Notes on Dependency Injection</h2>
+<p>ASP.NET Core is built with dependency injection. Services (such as EF Core DB Context) are registered with dependency injection during application startup. Components that require these services (such as Razor Pages) are provided these services via constructor parameters</p>
+<p>The scaffolding tool in VS automatically creates a DB context and registers it with the dependency injection container. This happens in the <code>Startup.ConfigureServices()</code> method</p>
+<h2 id="notes-on-working-with-databases">Notes on Working with Databases</h2>
+<p>The <code>*Context.cs</code> file coordinates EF Core functionality (Create, Read, Update, Delete) for the <code>*Model.cs</code>. The data context is derived from the DbContext class. The data context specifies which entities are included in the data model.</p>
+<p>In the data context class a <code>DbSet&lt;Model&gt;</code> property is created for the "entity set". In Entity Framework, an entity set corresponds to a database table. An entity corresponds to a row in the table. The name of the connection string is passed in to the context by calling on a method on a DbContextOptions object.</p>
+<h1 id="aspnet-core-mvc">ASP.NET Core MVC</h1>
+<p>ASP.NET Core MVC is a VS framework for building web apps and APIs with the MVC design pattern.</p>
+<p><code>Model</code> responsibilities</p>
+<ul>
+<li>The state of the application and any business logic or operations that should be performed by it</li>
+<li>Classes that represent the data of the app</li>
+<li>The model classes use validation logic to enforce business rules for that data. Typically, model objects retrieve and store model state in a database</li>
+</ul>
+<p><code>View</code> responsibilities</p>
+<ul>
+<li>presents the content through the UI</li>
+</ul>
+<p><code>Controller</code> responsibilities</p>
+<ul>
+<li>components that handle user interaction, work with the model, and ultimately select a view to render.</li>
+<li>Classes that handle browser requests. They retrieve model data and call view templates that return a response.</li>
+</ul>
+<p>In an MVC app, the view only displays information; the controller handles and responds to user input and interaction. For example, the controller handles route data and query-string values, and passes these values to the model. The model might use these values to query the database. For example, <code>https://localhost:5001/Home/Privacy</code> has route data of Home (the controller) and Privacy (the action method to call on the home controller). <code>https://localhost:5001/Movies/Edit/5</code> is a request to edit the movie with ID=5 using the movie controller.</p>
+<h2 id="routes">Routes</h2>
+<p>ASP.NET Core MVC is build on routing, a powerful URL-mapping component that lets you build applications that have comprehensible and searchable URLs. This enables you to define your application's URL naming patters that work well for search engine optimization. "Convention-based routing" is what allows you to globally define the URL formats that your application accepts. When an incoming request is received the routing engine parses the URL and patches it to one of the define URL formats and then calls the associated controller's action method.</p>
+<p><code>routes.MapRoute(name: "Default", template: "{controller=Home}/{action=Index}/{id?}");</code></p>
+<p>Attribute routing enables you to specify routing information by decorating controllers and actions with attributes that define the applicaiton's routes</p>
+<pre><code>[Route(&quot;api/[controller]&quot;)]
+public class ProductsController : Controller
+{
+    [HttpGet(&quot;{id}&quot;)]
+    public IActionResult GetProduct(int id)
+    {
+      ...
+    }
+}
+</code></pre>
+<h2 id="model-binding">Model Binding</h2>
+<p>ASP.NET Core MVC model binding converts client request data (form values, route data, query string params, http headers) into objects that the controller can handle. As a result, your controller logic doesn't have to do the work of figuring out the request data; it simply has the data as paramters to its action methods.</p>
+<p><code>public async Task&lt;IActionResult&gt; Login(LoginViewModel model, string returnUrl = null) { ... }</code></p>
+<p>Validation is supported by decorating the model object with data annotation validation attributes. The validation attributes are checked on the client side before values are posted to the server as well as on the side of the server before the controller action is called.</p>
+<pre><code>using System.ComponentModel.DataAnnotations;
+public class LoginViewModel
+{
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+
+    [Required]
+    [DataType(DataType.Password)]
+    public string Password { get; set; }
+
+    [Display(Name = &quot;Remember me?&quot;)]
+    public bool RememberMe { get; set; }
+}
+</code></pre>
+<p>A controller action:</p>
+<pre><code>public async Task&lt;IActionResult&gt; Login(LoginViewModel model, string returnUrl = null)
+{
+    if (ModelState.IsValid)
+    {
+      // work with the model
+    }
+    // At this point, something failed, redisplay form
+    return View(model);
+}
+</code></pre>
+</body>
+</html>
