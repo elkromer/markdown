@@ -1,9 +1,43 @@
+WHEN YOU GET BACK:
+- continue SBB BCB, java demos
+- read spencer response to 'National/other technology certifications' from Ken
+- add support to find-product for opening the installation directory after install. fix find product for ncp4a
+- investigate import putty sessions
+		See what PuTTY actually stores in the registry (and where)
+		See what the WinSCP behavior is, what it actually imports
+		Come up with an idea of what the behavior should be for SFTP Drive (when should we ask to import? Should we let them select which ones to import? What does WinSCP do? Etc.)
+		Write it all up in a bug.
+- update licensing page wiht info about legacy web sites vs web applications
+	https://www.nsoftware.com/kb/xml/01020301.rst#rtk
+
+SMALL FIXES
+
+UPDATE
+
+LOW PRIO
+
+WAITING
+-*Text editor prompts https://b.cdata.com/bugz-ns/show_bug.cgi?id=12809
+	^^^ Update Clark
+-investigate automatic detection of username and dynamically update SSH connection information on a drive https://b.cdata.com/bugz-ns/show_bug.cgi?id=12863
+-investigate ssh tunnels https://b.cdata.com/bugz-ns/show_bug.cgi?id=12857
+	^^^respond to Tyler once heard back
+
+CUSTOMER NOTIFY
+<RBediwi@dfsa.ae> Raeef Bediwi: Security Tokens with SFTP library
+Exempll <alfonsotabo@gmail.com> Alfonso: SFTP Drive V2 SSH Tunnels
+utveckling@pakompetens.se - SFTP Drive isolated 
+
+
+
+Fiddle
+Brush up on Diamond Creek sets
+
 ASP.NET
 Learn about the view bag, ViewData, ViewContext
 Figure out layout for Index, Blog, Downloads
 
 C#
-Learn about delegates and callbacks
 Learn about intricacies of variable copying, reference copying
 
 C++ 
