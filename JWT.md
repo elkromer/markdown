@@ -3,17 +3,13 @@ tags:
   - JWT
 ---
 
-JSON Web Tokens (JWTs pronounced "jots")
+# JSON Web Tokens (JWTs)
+>  "jots"
 
-Primary goal: JWTs represent a set of claims as a JSON object that is encoded in a JSON Web Signature (JWS) and/or JSON Web Encruption (JWE) structure
+JWTs represent a set of claims as a JSON object that is encoded in a JSON Web Signature (JWS) and/or JSON Web Encruption (JWE) structure
 
-Breif description {
-	A JWT is represented as a sequence of URL-safe parts separated by
-   period ('.') characters.  Each part contains a base64url-encoded
-   value.  The number of parts in the JWT is dependent upon the
-   representation of the resulting JWS using the JWS Compact
-   Serialization or JWE using the JWE Compact Serialization.
-}
+### Description
+A JWT is represented as a sequence of URL-safe parts separated by period ('.') characters.  Each part contains a base64url-encoded value.  The number of parts in the JWT is dependent upon the representation of the resulting JWS using the JWS Compact Serialization or JWE using the JWE Compact Serialization.
 
 How computed {
 	The following example JOSE Header declares that the encoded object is

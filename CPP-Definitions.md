@@ -12,7 +12,7 @@ tags:
 
 tells compilers about the name and type of something. 
 
-```
+```c++
 extern int x;  						  // object declaration
 std::size_t numDigits(int num); 	  // function declaration
 class Widget;					      // class declaration
@@ -26,7 +26,7 @@ A function's declaration reveals its **signature**, i.e., its parameter and retu
 
 provides compilers with details about the entity a declaration omits. For an object, the definition is where compilers set aside memory for the object.
 
-```
+```c++
 int x; 								// object definition
 
 std::size_t numDigits(int number)	// function definition
@@ -54,7 +54,7 @@ public:
 
 the process of giving an object its first value. For objects generated from structs or classes, initialization is performed by constructors. a **default constructor** is one that can be called without any arguments.
 
-```
+```c++
 class A {
 public:
 	A();
@@ -64,7 +64,7 @@ public:
 The **explicit** keyword prevents the constructors from being used to perform implicit type conversions. For example,
 
 `This compiles:`
-```
+```c++
 class B {
 public:
 	B(int x = 0, bool b = true)			 // default constructor
@@ -80,7 +80,7 @@ int main() {
 }
 ```
 `But this does not:`
-```
+```c++
 class B {
 public:
 	explicit B(int x = 0, bool b = true) // default constructor
@@ -97,7 +97,7 @@ int main() {
 ```
 The **copy constructor** is used to initialize an object with a different object of the same type. The **copy assignment operator** is used to copy the value from one object to another of the same type.
 
-```
+```c++
 class Widget {
 public: 
 	Widget();							  // default constructor
@@ -114,7 +114,7 @@ Fortunately, copy construction is easy to distinguish from copy assignment. If a
 
 A copy assignment operator of class T is a non-template non-static member function with the name `operator=` that takes one parameter of type `T`, `T&`, `const T&`, `volatile T&`, or `volatile const T&`. The copy assignment operator is called whenever selected by overload resolution, e.g. when an object appears on the left side of an assignment expression.
 
-```
+```c++
 bool hasAcceptableQuality(Widget w);   // w is passed to the function by value
 
 Widget aWidget;
@@ -122,26 +122,3 @@ if (hasAcceptableQuality(aWidget))...
 ```
 
 In the call above, `aWidget` is copied into `w`. The copying is done by Widget's copy constructor. **Pass-by-value** means "call the copy constructor". Note: it is generally a bad choice to pass user-defined types by value. Pass-by-reference-to-const is typically a better choice.
-
-## **STL**
-
-The Standard Template Library is the part of the C++ standard library devoted to containers (e.g. vector, list, set, map, etc.) and related functionality. Much of the related functionality has to do with **function objects**: objects that act like functions. Such objects come from classes that overload `operator()`.
-
-## **Undefined behavior**
-
-For a variety of reasons, the behavior of some constructs in C++ is literally not defined: you can't reliably predict what will happen at runtime. 
-
-```
-int *p = 0;
-cout << *p;
-
-char name[] = "Reese";
-char c = name[10];
-```
-
-The results of undefined behavir are not predictable and may be very unpleasant. Programs with undefined behavior can potentially erase your hard drive. It's not probable though. Most likely the program will behave erratically, sometimes running normally other times crashing, still other times producing incorrect results.
-
-## **interface**
-
-Not a language element in C++. This generally talks about a function's name and signature, about the accessible elements of a class (e.g. a class's "public interface", "protected interface", or "private interface") or about the expressions that must be valid for a template's type parameter. Interfaces are a fairly general design idea.
-

@@ -3,8 +3,8 @@ tags:
   - OFTP, ODETTE
 ---
 
-ODETTE File Transfer Protocol (OFTP)
-nothing like FTP
+# ODETTE File Transfer Protocol (OFTP)
+> nothing like FTP
 
 Primary goal = {
 	Facilitate the transmission of a file between one or more locations in a way that is independent of the data communication network, system hardware and software environemnt.

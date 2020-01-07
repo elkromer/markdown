@@ -3,26 +3,24 @@ tags:
   - TLS
 ---
 
-TLS
+# Transport Layer Security (TLS)
 
-Primary goal: provide privacy and data integrity between two communicating applications.
+Provides privacy and data integrity between two communicating applications.
 
-Layers 
-	TLS Handshake Protocol 
-		Allows the client and server to authenticate each other and to negotiate an encryption algorithm and crypto keys before the application transmits any data. Three basic properties
-      -A peers identity can be authenticated 
-        Using asymmetric cryptography
-      -Negotiation of shared secret is secure 
-        Negotiated secret is unavailable to eavesdroppers.
-      -Negotiation of shared secret is reliable 
-        No attacker can modify the negotiation communication without being detected.
+## Layers 
+
+- ### TLS Handshake Protocol 
+  Allows the client and server to authenticate each other and to negotiate an encryption algorithm and cryptography keys before the application transmits any data. Three basic properties
+    + A peers identity can be authenticated using asymmetric cryptography
+    + Negotiation of shared secret is secure (negotiated secret is unavailable to eavesdroppers)
+    + Negotiation of shared secret is reliable (no attacker can modify the negotiation communication without being detected).
 			
-	TLS Record Protocol 
-		Provides connection security. Mainly used for encapsulation of various higher-level protocols. Two basic properties
-      -Connection is private 
-        Symmetric cryptography used for data encryption. Keys generated uniquely for each connection and based on a secret negotiated by TLS Handshake protocol.
-      -Connection is reliable 
-        A "secure" hash function that uses a secret (keyed MAC) is used as a checksum 
+- ### TLS Record Protocol 
+  Provides connection security. Mainly used for encapsulation of various higher-level protocols. Two basic properties
+    + Connection is private. Symmetric cryptography used for data encryption. Keys generated uniquely for each connection and based on a secret negotiated by TLS Handshake protocol.
+    + Connection is reliable. A "secure" hash function that uses a secret (keyed MAC) is used as a checksum 
+
+----------------------------------------
 
 TLS Handshake Protocol
   Use to negotiate the security parameters. 

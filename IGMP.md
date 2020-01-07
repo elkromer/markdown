@@ -3,8 +3,9 @@ tags:
   - IGMP
 ---
 
-Internet Group Management Protocol
-  Hx: Host Extensions for IP Multicasting -> IGMP v2 -> IGMP v3 -> Multicast listener discovery
+# Internet Group Management Protocol (IGMP)
+
+> Host Extensions for IP Multicasting -> IGMP v2 -> IGMP v3 -> Multicast listener discovery
 
 Used by IP hosts to report their multicast group memberships to routers. IP multicasting is the transmission of an IP datagram to a "host group", a set of zero or more hosts identified by a single IP destination address. A multicast datagram is delivered to all members of its destination host group. 
 

@@ -33,7 +33,7 @@ Layouts can optionally reference one or more sections by calling `@RenderSection
 
 Individual views specify the content to be rendered within a section using the `@section` syntax. If a page or view defines a section it must be rendered or an error will occur
 
-```
+```cs
 @section Scripts {
     <script type="text/javascript" src="~/scripts/main.js"></script>
 }
@@ -48,12 +48,12 @@ Views and pages can use Razor directives to import namespaces and use dependency
 A ViewImports file can be placed within any folder, in which case it will only be applied to pages or views within that folder and its subfolders. ViewImports files are processed starting at the root level and then for each folder leading up to the location of the page or view itself. ViewImports settings specified at the root level may be overridden at the folder level
 
 Suppose the root level `_ViewImports.cshtml` file includes...
-```
+```cs
   @model Model1 
   @addTagHelper *, MyTagHelper1
 ```
 Suppose a subfolder `_ViewImports.cshtml` file includes... 
-```
+```cs
   @model Model2
   @addTagHelper *, MyTagHelper2
 ```
@@ -102,7 +102,9 @@ ASP.NET Core MVC is build on routing, a powerful URL-mapping component that lets
 
 When an incoming request is received the routing engine parses the URL and patches it to one of the define URL formats and then calls the associated controller's action method.
 
-`routes.MapRoute(name: "Default", template: "{controller=Home}/{action=Index}/{id?}");`
+```cs
+routes.MapRoute(name: "Default", template: "{controller=Home}/{action=Index}/{id?}");
+```
 
 Attribute routing enables you to specify routing information by decorating controllers and actions with attributes that define the applicaiton's routes
 
@@ -126,7 +128,7 @@ ASP.NET Core MVC model binding converts client request data (form values, route 
 
 Validation is supported by decorating the model object with data annotation validation attributes. The validation attributes are checked on the client side before values are posted to the server as well as on the side of the server before the controller action is called.
 
-```
+```cs
 using System.ComponentModel.DataAnnotations;
 public class LoginViewModel
 {
@@ -143,7 +145,7 @@ public class LoginViewModel
 }
 ```
 A controller action:
-```
+```cs
 public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
 {
     if (ModelState.IsValid)

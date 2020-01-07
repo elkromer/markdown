@@ -3,6 +3,8 @@ tags:
   - MIME
 ---
 
+# Multipurpose Internet Mail Extensions (MIME)
+
 Various headers are used to specify the structure of a MIME message. 
 
 The "MIME-Version: X.X" header field is required at the top level. It is not required for each body part of a multipart entity. It is required for the embedded headers of a body of type "message/rfc822" or "message/partial" if and only if the embedded message is itself claimed to be MIME-conformant.

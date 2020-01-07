@@ -3,7 +3,7 @@ tags:
   - TELNET
 ---
 
-TELNET Protocol
+# Teletype Network Protocol (TELNET)
 
 A TCP connection used to transmit data with interspersed TELNET control information. A Network Virtual Terminal is set up on each side. NVT is an imaginary device which provides a standard, network-wide, itermediate representation of a canonical terminal. Both sides set one up to eliminate the need to maintain information about each other's terminals and terminal handling conventions.
 

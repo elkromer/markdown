@@ -9,13 +9,13 @@ tags:
 
 Delegate is a type that encapsulates both an object instance and a method. Similar to C++ function pointers but are fully object-oriented. They are used extensively to define callback methods and can be chained together. Below is a delegate **declaration**
 
-```
+```cs
 public delegate void Del(string message);
 ```
 
 Delegate types are derived from the **Delegate** class in .NET. Delegate types are sealed-- they cannot be derived from. A delegate can wrap a method defined somewhere else, like this one
 
-```
+```cs
 public static void DelegateMethod(string message)
 {
     Console.WriteLine(message);
@@ -24,7 +24,7 @@ public static void DelegateMethod(string message)
 
 A delegate object is constructed by setting the method the delegate will wrap
 
-```
+```cs
 Del handler = DelegateMethod;
 ```
 Because the instantiated delegate is an object, it can be passed as a parameter or assigned to a property. This is an asynchronous callback. When a delegate is constructed to wrap an instance-method, the delegate references both the instance and the method. 
@@ -33,7 +33,7 @@ Because the instantiated delegate is an object, it can be passed as a parameter 
 
 A delegate can call more than one method when invoked. To add an extra method to the delegate's list of methods (the **invocation list**), add delegates using the addition operators.
 
-```
+```cs
 var obj = new MethodClass();
 Del d1 = obj.Method1;
 Del d2 = obj.Method2;

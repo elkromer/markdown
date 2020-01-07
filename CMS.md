@@ -17,8 +17,6 @@ ContentInfo ::= SEQUENCE {
 	contentType ContentType,
 	content [0] EXPLICIT ANY DEFINED BY contentType 
 }
-
-contentType = a unique string of integers assigned by an authority that defines the content type
-
-content = the associated content. the type of content is determined uniquely by contentType. Content types for data, signed-data, enveloped-data, digested-data, encrypted-data, and authenticated-data are defined in the document
 ```
+- **contentType**: a unique string of integers assigned by an authority that defines the content type.
+- **content**: the associated content. the type of content is determined uniquely by contentType. Content types exist for data, signed-data, enveloped-data, digested-data, encrypted-data, and authenticated-data.a
