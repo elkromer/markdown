@@ -1,6 +1,8 @@
 ---
 tags:
 	- Edition
+	- nsoftware
+	- /nsoftware
 	- Notes
 	- Demos
 ---
@@ -11,5 +13,3 @@ When working on C++ Edition demos, the `unix` demos are the C++ console demos. E
 
 - Develop demos in `C:\dev\branches\v20\demos\SecureBlackbox\pdfencryptor\unix\component`
 - Run `make-copydemos.ps1` and then put them in `/home/test/setup/prod/demos/console`
-
-
