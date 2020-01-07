@@ -10,7 +10,26 @@ tags:
 ## Welcome back to C++
 C++ is one of the most widely used programming languages in the world. Well-written programs are fast and efficient, the language is more flexible than other languages because it enables you to access low-level hardware features to maximize speed and minimize memory requirements.
 
+Regardless of your programming background, C++ is likely to take a little getting used to. It's a powerful language with an enormous range of features. 
+
 Backwards compatibility with C was one of the original requirements for C++. The evolution of C++ features greatly reduce the need to use C-style idioms. 
+
+### C++ Heritage
+
+In the beginning, C++ was just C with some object-oriented features tacked on. It's original name was "C with Classes". As it got older, it grew more bold and adventurous adopting ideas, features, and programming strategies different from those of C with Classes. Exceptions required different approaches to structuring functions. Templates gave rise to new ways of thinking about design, and the STL defined an approach to extensibility unlike any most people had ever seen.
+
+Now C++ is a *multiparadigm programming language*, one supporting a combination of procedural, object-oriented, functional, generic, and metaprogramming features. How do you make sense of a language where all the "proper usage" rules have exceptions? The easiest way to make sense of it all is to view C++ as a federation of related languages. Within a particular sublanguage the rules tend to be simple, straightforward, and easy to remember. 
+
+### The C++ sub-languages
+
+- **C**: Blocks, statements, the preprocessor, built-in data types, arrays, pointers, etc. all come from C. The rules for effective programming reflect C's more limited scope: no templates, no exceptions, no overloading, etc.
+- **Object-Oriented C++**: This part of C++ is what "C with Classes" was all about. Classes, constructors, destructors, encapsulation, inheritance, polymorphism, virtual functions (dynamic binding), etc. The classic rules of OO design most directly apply here.
+- **Template C++**: The generic programming part of C++ (the part most have the least experience with). Templates are so powerful they give way to their own programming paradigm, *template metaprogramming* (TMP). The rules for TMP rarely interact with mainstream C++ programming.
+- **The STL**: A very special template library. Its conventions regarding containers, iterators, algorithms, and function objects mesh beautifully (but templates and libraries can be built around other ideas too). The STL has particular ways of doing things, and when you're working with the STL, you need to be sure to follow its conventions.
+
+Keeping all the sublanguages in mind is super-important because you will encounter situations where effective programming requires that you change strategy when you switch from one sublanguage to another. 
+
+For example, pass-by-value is generally more efficient than pass-by-reference for built-in (C-like) types. However, when you move from the C part of C++ to the OO part of C++ the existence of user-defined constructors and destructors means that pass-by-reference-to-const is usually better. This is especially the case when working in Template C++ because you don't even know the type of object you are dealing with. When you cross into STL-land you know that iterators and function objects are modlered on pointers in C, so for iterators and function objects in the STL, the pass-by-value rule applies again.
 
 ## Stack vs Heap Memory Allocation
 Stack allocation happens on contiguous blocks of memory. It is called stack memory allocation because allocation happens in the function call stack. Whenever the function call is over, the memory for the variables is deallocated.
