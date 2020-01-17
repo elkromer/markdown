@@ -8,7 +8,7 @@ tags:
 # Writing Effective C++
 > Based on Effective C++ 3rd Edition by Scott Meyers
 
-## Prefer the compiler to the preprocessor
+## 1. Prefer the compiler to the preprocessor
 
 Prefer `const`, `enum`, and `inline` to `#define`. C directives may be treated as if it's not exactly part of the language. A directive's symbolic name may never be seen by compilers because it is removed by the preprocessor before compilation. 
 
