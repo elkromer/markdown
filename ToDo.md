@@ -1,18 +1,16 @@
 WHEN YOU GET BACK:
-https://b.cdata.com/bugz-ns/show_bug.cgi?id=13057
 https://b.cdata.com/bugz-ns/show_bug.cgi?id=13089
 
 - COME UP WITH A BETTER METHOD FOR KNOWING THE BUGS THAT NEED COMMENTS AND RITUALLY COMMENTING ON THEM FIRST THING
 - continue SBB BCB, java demos
-- read spencer response to 'National/other technology certifications' from Ken
-- add support to find-product for opening the installation directory after install. fix find product for ncp4a
-	+ fix message for searching for accidentally searching for a beta project that was moved to full release
 - investigate import putty sessions
 	+ See what PuTTY actually stores in the registry (and where)
 	+ See what the WinSCP behavior is, what it actually imports
 		and come up with an idea of what the behavior should be for SFTP Drive (when should we ask to import? Should we let them select which ones to import? What does WinSCP do? Etc.)
 		Write it all up in a bug.
 
+- add support to find-product for opening the installation directory after install. fix find product for ncp4a
+	+ fix message for searching for accidentally searching for a beta project that was moved to full release
 - update licensing page wiht info about legacy web sites vs web applications
 	https://www.nsoftware.com/kb/xml/01020301.rst#rtk
 SMALL FIXES
