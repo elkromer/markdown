@@ -7,11 +7,10 @@ tags:
 
 # Cryptography Definitions
 
-## **Digital signature** or **Digital signature scheme**
+## Digital Signature
+>Gives to the recipient reasons to believe the messages was created by a known sender and that it was not altered in transit.
 
-A mathematical scheme for demonstrating the authenticity of a digital message or document. A valid digital signature gives to the recipient reasons to believe the messages was created by a known sender and that it was not altered in transit. Digital signatures are commonly used for software distribution, financial transactions, and in other cases when it is important to detect forgery and tampering.
-
-### alternative definition
+A mathematical scheme for demonstrating the authenticity of a digital message or document. Digital signatures are commonly used for software distribution, financial transactions, and in other cases when it is important to detect forgery and tampering.
 
 Data appended to, or a cryptographic transformation of, a data unit that allows a recipient of the data unit to prove the source and integrity of the data unit and protect against forgery, e.g., by the recipient.
 
