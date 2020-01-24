@@ -116,9 +116,11 @@ This header specifies whether the part was processed for transfer (transfer-enco
 
 ### Transfer Encodings
 
+### `Quoted-Printable`
+
 [Quoted-Printable](https://tools.ietf.org/html/rfc2045#section-6.7) encoding is intended to represent data that largely consists of octets that correspond to printable characters in US-ASCII. It encodes the data in such a way that the resulting octets are unlikely to be modified by mail transport. If the data being encoded are largely US-ASCII text, the encoded form of the data remains largely recognizable by humans. 
 
-It mainly provides a way to convert text into a format that is safe fore delivery through SMTP applications. It escapes characters outside of the normal ASCII character set, non-printing characters, and some whitespace characters. Some other characters like punctuation may also be escaped. Line breaks are not encoded! The encode converts any character that must be escaped into an equal sign followed by the character's ASCII value in hexadecimal. 
+As a summary, it mainly provides a way to convert text into a format that is safe fore delivery through SMTP applications. It escapes characters outside of the normal ASCII character set, non-printing characters, and some whitespace characters. Some other characters like punctuation may also be escaped. Line breaks are not encoded! The encode converts any character that must be escaped into an equal sign followed by the character's ASCII value in hexadecimal. 
 
 ```
 J'interdis aux marchands de vanter trop leurs marchandises. Car ils se font =
@@ -128,12 +130,9 @@ ent=C3=B4t qui te d=C3=A9gradent, car si leur musique est vulgaire ils te f=
 abriquent pour te la vendre une =C3=A2me vulgaire.
 ```
 
-8-bit representation: Any octet (except CR or LF) that is a part of the standard form of the data being encoded may be represented by an "=" followed by a two digit hexadecimal representation of the octet's value. This rule must be followed except when the following rules allow an alternative encoding. This is the baseline.
-
-Literal representation: Octets with decimal values of 33-60 inclusive and 62-126 inclusive MAY be represented as the US-ASCII characters which correspond to those octets (EXCLAMATION POINT through LESS THAN, and GREATER THAN through TILDE respectively)/
-
-White Space: Octets with values of 9 and 32 may be represented as US-ASCII TAB and SPACE characters but MUST NOT be represented at the end of an encoded line. Any TAB or SPACE character on an encoded line MUST be followed by a printable character. In particular, an "=" at the end of an encoded line, indicating a soft line break may follow one or more TAB or SPACE characters. A SPACE or TAB at the end of an encoded line MUST be represented by the 8-bit representation.
-
-Line Breaks: CRLF in the text's standard form must be represented by Quoted-Printable. No hard line breaks that are intended to be displayed to the user can appear in Quoted-Printable.
-
-Soft Line Breaks: QP REQUIRES that encoded lines be no more than 76 characters long. If longer lines are to be encoded, "soft" line breaks MUST be used. An equal sign as the last character on an encoded line indicates a soft line break.
+In this encoding, octets are to be represented as determined by the following rules:
+1. `8bit representation` Any octet (except CR or LF) that is a part of the standard form of the data being encoded may be represented by an "=" followed by a two digit hexadecimal representation of the octet's value. This rule must be followed except when the following rules allow an alternative encoding. This is the baseline.
+2. `Literal representation` Octets with decimal values of 33-60 inclusive and 62-126 inclusive MAY be represented as the US-ASCII characters which correspond to those octets (EXCLAMATION POINT through LESS THAN, and GREATER THAN through TILDE respectively)/
+3. `White Space` Octets with values of 9 and 32 may be represented as US-ASCII TAB and SPACE characters but MUST NOT be represented at the end of an encoded line. Any TAB or SPACE character on an encoded line MUST be followed by a printable character. In particular, an "=" at the end of an encoded line, indicating a soft line break may follow one or more TAB or SPACE characters. A SPACE or TAB at the end of an encoded line MUST be represented by the 8-bit representation.
+4. `Line Breaks` CRLF in the text's standard form must be represented by Quoted-Printable. No hard line breaks that are intended to be displayed to the user can appear in Quoted-Printable.
+5. `Soft Line Breaks` QP REQUIRES that encoded lines be no more than 76 characters long. If longer lines are to be encoded, "soft" line breaks MUST be used. An equal sign as the last character on an encoded line indicates a soft line break.
