@@ -27,16 +27,38 @@ Provides access to the X.500 Directory (a personal or company Directory Informat
 - **Search**: Used to request a server to return a set of entries matching a complex search criterion.
 
 ## Search
-  baseObject: the name of the base object entry relative to which the search should be performed
-  scope: the scope of the search 
-        baseObject: scope is constrained to the entry named by baseObject
-        singleLevel: scope is constrained to the immediate children of baseObject.
-        wholeSubtree: scope is constrained to all the subordinates of the baseObject.
-  derefAliases: indicator whether or not to derefence aliases during stages of the search operation.
-  sizeLimit: Maximum number of entries to be returned
-  timeLimit: Maximim time limit in seconds allowed for a search.
-  typesOnly: An indicator as to whether search operations are to contain just descriptions (TRUE) or both attribute descriptions and values(FALSE).
-  filter: the conditions that must be fulfilled in order for the search to match a given entry
-  attributes: A selection list of the attributes to be returned from each entry that matches the search filter.
-        either an attributedescription or selector special ("1.1" - noattrs, "*" - alluserattrs)
+
+The search operation allows a client to request that a search be performed on its behalf by a server. This can be used to read attributes from a single entry or a whole subtree of entries.
+
+```
+        SearchRequest ::= [APPLICATION 3] SEQUENCE {
+                baseObject      LDAPDN,
+                scope           ENUMERATED {
+                        baseObject              (0),
+                        singleLevel             (1),
+                        wholeSubtree            (2) },
+                derefAliases    ENUMERATED {
+                        neverDerefAliases       (0),
+                        derefInSearching        (1),
+                        derefFindingBaseObj     (2),
+
+                        derefAlways             (3) },
+                sizeLimit       INTEGER (0 .. maxInt),
+                timeLimit       INTEGER (0 .. maxInt),
+                typesOnly       BOOLEAN,
+                filter          Filter,
+                attributes      AttributeDescriptionList }
+```
+
+- baseObject: the name of the base object entry relative to which the search should be performed
+- scope: the scope of the search 
+  + baseObject: scope is constrained to the entry named by baseObject
+  + singleLevel: scope is constrained to the immediate children of baseObject.
+  + wholeSubtree: scope is constrained to all the subordinates of the baseObject.
+- derefAliases: indicator whether or not to derefence aliases during stages of the search operation.
+- sizeLimit: Maximum number of entries to be returned
+- timeLimit: Maximim time limit in seconds allowed for a search.
+- typesOnly: An indicator as to whether search operations are to contain just descriptions (TRUE) or both attribute descriptions and values(FALSE).
+- filter: the conditions that must be fulfilled in order for the search to match a given entry
+- attributes: A selection list of the attributes to be returned from each entry that matches the search filter.
 
