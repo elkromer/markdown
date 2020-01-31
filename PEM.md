@@ -17,7 +17,7 @@ RFC 1421 is the original document. RFC 1422 specifies supporting public-key cert
 
 Aimed at enhancing the privacy for electronic mail transferred in the Internet. The defined mechanisms were designed to be compatible with a range of mail transport agents (SMTP implementations)
 
-## Message Encryption and Authentication Procedures (PEM Part 1)
+## RFC 1421: Message Encryption and Authentication Procedures 
 
 Defines encryption and authentication procedures, in order to provide privacy-enhanced mail services for electronic mail transfer in the Internet. Compatible with various key management approaches such as asymmetric and symmetric key encryption. The following facilities are provided:
 
@@ -45,7 +45,7 @@ Four phase transformation procedure:
 3. The canoncial form is optionally padded (depending on the algorithm) then encrypted
 4. The encrypted text is encoded in a printable form
 
-The output of the above is combined with a set of header fields carrying cryptographic control information. The resulting PEM message is apssed to the electronic mail system to me included within the text portion of a transmitted message.
+The output of the above is combined with a set of header fields carrying cryptographic control information. The resulting PEM message is passed to the electronic mail system to be included within the text portion of a transmitted message.
 
 When a PEM message is received, the cryptographic control fields within its encapsulated header provide the information required for each authorized recipient to perfom MIC validation and decryption of the received message text. E.g. the printable encoding is converted to bitstring, encrypted portions are decrypted, MIC is validated, then the recipient PEM process converts the canonical representation to the appropriate local form.
 

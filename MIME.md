@@ -13,7 +13,7 @@ A set of documents based on [RFC 822 ARPA Internet Text Messages](https://tools.
 
 The first document specifies the various headers used to describe the structure of MIME messages ([RFC 2045](https://tools.ietf.org/html/rfc2045))
 
-The second document defines the general structure of the MIME media typing system and some preliminary media types ([RFC 2046](https://tools.ietf.org/html/rfc2045))
+The second document defines the general structure of the MIME media typing system and some preliminary media types ([RFC 2046](https://tools.ietf.org/html/rfc2046))
 
 The third document describes extensions to ARPA Internet Text Messages to allow non-US-ASCII text data in mail header fields ([RFC 2047](https://tools.ietf.org/html/rfc2047))
 
@@ -22,6 +22,7 @@ The fourth document specifies IANA registration procedures for MIME-related faci
 The fifth document describes MIME conformance criteria and provides illustrative examples of MIME message formats ([RFC 2049](https://tools.ietf.org/html/rfc2049)).
 
 ## RFC 822: ARPA Internet Text Messages
+> The granddad of electronic mail
 
 Messages are viewed as having an envelope and contents. The envelpe contains whatever information is needed to accomplish transmission and delivery. The contents compose the object to be delivered.
 
@@ -71,6 +72,97 @@ The body is simply a sequence of lines containing ASCII characters separated fro
 
 [See the full Message spec...](https://tools.ietf.org/html/rfc822#section-4)
 
+## RFC 934: Message Encapsulation
+> An important proposed standard for RFC 822 that was not an official update but largely adopted
+
+The services a mail user agent can offer vary widely. All outgoing mail can be thought of as going though a single posting slot to connect to the mail transport system. A message draft can be described by one of these four types of postings:
+
+`Originate`
+
+A new message composed from scratch.
+
+`Reply`
+
+A message composed as a reply to a previously received message. **The user agent aids the user** by constructing the header portion of the message draft using components extracted from the received message.
+
+`Forward`
+
+One or more messages previously received formatted by the user agent as a part of the body portion of the draft.
+  + Forwarding can be thought of as encapsulating one or more messages inside another. Without a decapsulation process the forwarded messages are of little use to the recipients because they cannot be distributed, forwarded, replied-to, or otherwise processed as individual messages.
+
+`Distribute`
+
+A previously received message is re-posted to the mail transfer system with additional headers to reference the re-sender's address.
+
+### Message Structure
+
+A draft message consists of a header portion and a text portion. If the text portion is present, it is separated from the header portion by a blank line. **Inside the text portion** a certain character sequence known as an `encapsulation boundary` has special meaning. An EB is defined as a line that starts with a `-`. Below is a description of the structure of a general forwarding message.
+
+### The Header Portion
+
+Should conform to [RFC 822](https://tools.ietf.org/html/rfc822).
+
+### The Text Portion (A.K.A The body from RFC 822)
+
+The text of the draft consists of three parts: an initial text section, the encapsulated messages, and the final text section.
+
+- `Initial Text Section` =. All text up to the first EB comprise the initial text section.
+
+- `Enapsulated Messages` = Each encapsulated message is bounded by two EBs: a pre-EB which occurs before the message and a post-EB afterwards. Each encapsulated message has two parts
+  + A Header Portion
+  + A Text Portion
+
+- `Final Text Section` = All text after the last EB. Usually contains the sign-off banner for the digest.
+
+```
+MIME-Version: 1.0
+From: Nathaniel Borenstein <nsb@nsb.fv.com>
+To: Ned Freed <ned@innosoft.com>
+Date: Fri, 07 Oct 1994 16:15:05 -0700 (PDT)
+Subject: A multipart example
+Content-Type: multipart/mixed;
+            boundary=unique-boundary-1
+
+This is the preamble area of a multipart message.
+Mail readers that understand multipart format
+should ignore this preamble.
+
+If you are reading this text, you might want to
+consider changing to a mail reader that understands
+how to properly display multipart messages.
+
+--unique-boundary-1
+Content-type: text/plain; charset=US-ASCII
+
+Hi Kathy,
+
+My name is Nathaniel with nsb unlimited.
+
+Thanks,
+Nathan
+
+--unique-boundary-1
+Content-Type: multipart/parallel; boundary=unique-boundary-2
+
+--unique-boundary-2
+Content-Type: audio/basic
+Content-Transfer-Encoding: base64
+
+NAKMXC812931kacnakjsnaksjnda9123123123
+
+--unique-boundary-2
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+
+alskjdalskdjak12312312eqd12312
+
+--unique-boundary-2--
+
+--unique-boundary-1--
+```
+
+[Message encapsulation...](https://tools.ietf.org/html/rfc934)
+
 ## RFC 2045: MIME Structure
 
 Various headers are used to specify the structure of a MIME message. All of the header fields defined in this document are subject ot the general syntactic rules for header fields specified in ARPA Internet Text Messages.  
@@ -113,6 +205,34 @@ The Content-Description header associates some descriptive information with a gi
 `Content-Transfer-Encoding: 7bit`
 
 This header specifies whether the part was processed for transfer (transfer-encoded) and how the body of the message part is currently represented. If this field value is `base64` or `quoted-printable` the body part was processed for transmission. `7bit`, `8bit`, and `binary` indicate that the body has not been processed for transmission.
+
+## RFC 2049: Composing a MIME Message
+
+The "canonical encoding model" is the four stage process for converting **email data** into a MIME entity. 
+
+1. `Creation of a local form`
+
+The body to be sent is created in the system's native format, with the native character set and local newline conventions. The data itself does not matter, it can be text, image, audio, or anything else.
+
+2. `Conversion to canonical form`
+
+The entire body (including meta information) is converted to a universal form. The media-type of the data dictacte the nature of the canonical form. Conversion may include character set conversion, compression, transformation, or other operations specific to that media-type.
+
+3. `Apply transfer encoding`
+
+Another layer of encoding is applied. No fixed relationship between the media-type and transfer encoding. Usually `base64` or `quoted-printable`.
+
+4. `Insertion into entity`
+
+The encoded body is inserted into a MIME entity with appropriate headers. The entity is then inserted into a higher-level entity as needed.
+
+A message with the following header fields:
+
+```
+Content-type: text/foo; charset=bar
+Content-Transfer-Encoding: base64
+```
+... must first be represented in the `text/foo` form, then (if necessary) represented in the `bar` character set, and finally transfeormed via `base64` algorithm into a mail-safe form.
 
 ### Transfer Encodings
 
