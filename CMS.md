@@ -13,6 +13,8 @@ tags:
 
 CMS describes a syntax for representing data that may have cryptography applied to it, such as digital signatures, digital envelopes, attributes, signing time, and contents of a message. The syntax allows multiple encapsulations contained within it.
 
+The first sentence of the **scope** of this RFC is "this document is compatible with Privacy-Enhanced Mail". That just goes to show how big PEM was at one time, I guess.
+
 ### History
 
 The original specification for CMS Version 1.5 was [PKCS #7](https://tools.ietf.org/html/rfc2315). RFC 2630 was the first version of CMS on the IETF Standards Track in which minor changes were made to accomodate "version 1 attribute certificate transfer" and support "algorithm-independent key management".  RFC 3369 obsoletes RFC 2630 and defines an extension mechanism to support new key management schemes without further changes to the CMS. RFC 3852 defines a similar extension mechanism to support additional certificate formats. RFC 5652 obsoletes RFC 3852 "to advance the CMS along the standards maturity ladder", clarify the proper handling of SignedData protected content type when more than one digital signature is present, and corrected errors in RFC 3852.

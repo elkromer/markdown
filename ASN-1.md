@@ -7,13 +7,17 @@ tags:
 ---
 
 # Abstract Syntax Notation 1 (ASN.1)
-> A notation for describing abstract types and values.
+> A notation for describing abstract types and values. 
 
 A notation for the definition of abstract syntaxes that enable other standards to define the types of information they need to transfer. You are actually using this every day without knowing it. It works so well, it's invisible!
 
-3G and 4G mobile standards use it, x509 certificates, voip, ldap, snmp... It has two main aspects: Associating types with information and serializing data on the wire so it can be platform-independent.
+3G and 4G mobile standards use it, x509 certificates, voip, ldap, snmp... It has two main aspects: Associating types with information and serializing data on the wire so it can be platform-independent. 
 
 ```
+ITU-T X.200 Basic Reference Model (OSI)
+
+ITU-T X.208 Specification of ASN.1 (superceded by X.680-3S)
+
 ITU-T X.680 series (NOTATION SYNTAX)
 	- X.680 Basic notation
 	- X.681 Information object specification
