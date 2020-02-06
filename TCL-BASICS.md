@@ -22,6 +22,10 @@ Interpreters will run through a program line by line and execute each command. I
 
 Examples: `Tcl`, `PHP`, `Ruby`, `Python`, and `JavaScript`
 
+#### Math
+
+In TCL 7.6 and earlier math is not that efficient because of conversions between strings and numbers. The `expr` command must convert its argument from strings to numbers. In 8.0 and later, the overhead of conversions is eliminated in most cases by the built-in compiler. **Even so, Tcl was not designed to support math-intensive applictions.** You may want to implement math-intensive code in a compiled language and register the function as a Tcl command.
+
 ##  TCL Commands
 
 Everything is cast into the mold of a command, even programming constructs like variable assignment and procedure definitions.
@@ -65,11 +69,20 @@ set x 7
 set len [expr [string length foobar] + 7]
 => 13
 ```
+
+
+
 ## Grouping 
 
 Double quotes and curly braces are used to group words together into one argument. The difference between double quotes and curly braces is that quotes allow substitution to occur in the group and curly braces do not.
 
-Grouping with curly braces is usually done when substitutions on the argument must be delayed until a later time or never done at all.
+Grouping with curly braces is usually done when substitutions on the argument must be delayed until a later time or never done at all. They can be crucial in certain situations. For example, this is an infinite loop:
+
+```tcl
+set i 1; while $i<=10 {incr i}
+```
+
+The reason is that the Tcl interpreter will substitute for `$i` *before* `while` is called.
 
 #### Square Brackets do not Group
 
@@ -95,7 +108,29 @@ puts stdout $x+$y=[expr $x + $y]
 
 The white space inside the nested command is ignored for the purposes of grouping the argument. By the time Tcl encounters the left bracket, it has already done some variable substitutions to get: `7+9=`. When the left bracket is encountered, the interpreter calls itself recursively to evaluate the nested command. Again, the $x and $y are substituted before calling `expr`. Finally, the result of `expr` is substituted and gives rise to `puts` third argument: `7+9=16`.
 
-*Grouping before substitution.*
+>*Grouping before substitution.*
+
+## Procedures
+
+Once defined, a Tcl procedure is used just like any of the other built-in tcl commands. The basic syntax to define a procedure is:
+
+```tcl
+proc name arglist body
+```
+
+The Tcl interpreter returns the value of the last command in the body as the value of the procedure. 
+
+```tcl
+proc rFactorial {x} {
+    if {$x <= 1} {
+        return 1
+    } else {
+        return [expr {$x * [rFactorial [expr {$x - 1}]]}]
+    }
+}
+```
+
+
 
 ## Notes
 `expr` parses and evaluates math functions. It operates more efficiently if the arguments are grouped.
@@ -104,3 +139,11 @@ set x 7
 set len [expr {[string length foobar] + 7]}
 => 13
 ```
+
+A common mistake is to forget a space between arguments when grouping with braces or quotes. Whitespace is used as the separator, if you forget the space you will see errors about unexpected characters. 
+
+```tcl
+if {$x > 1}{puts "x = $x"}
+```
+
+Feeding a Tcl command bad arguments is a good way to figure out its usage.
