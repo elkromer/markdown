@@ -135,6 +135,8 @@ format "%${lang}\$s" one un uno
 
 ### Binary
 
+The `binary` commands provide conversion between strings and packed binary data.
+
 The `binary format` command takes values and packs them according to a template. The resulting binary value is returned:
 
 ```tcl
