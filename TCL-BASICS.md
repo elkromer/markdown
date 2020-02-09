@@ -129,6 +129,17 @@ proc rFactorial {x} {
     }
 }
 ```
+Procedures parameterize a commonly used sequence of commands. They can have default parameters so that the caller can leave out some of the command arguments. A default parameter is specified with its name and default value:
+
+```tcl
+proc P2 {a {b 7} {c -2} } {
+	expr $a / $b + $c
+}
+P2 6 3
+=> 0
+```
+
+A procedure can take a variable number of arguments by specifying the `args` keyword as the last parameter.
 
 
 
