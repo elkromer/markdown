@@ -24,6 +24,11 @@ tags:
 	+ if you make a structural change to the help source then you have to regenerate the sqlite database with `make data` and call `make urls` 
 	+ urls takes the templates and injects sqlite database information and the end result is the output files generated in release.
 
+## `make _target`
+- Rebuilds the public api based on the local changes on disk. **You must SVN Update by hand.**
+- The installer will be refreshed with the new library but other things like the build number won't be updated
+
+
 ## Notes
 
 - `j2cs.tcl` and `j2cp.tcl` are completely standalone translation scripts.

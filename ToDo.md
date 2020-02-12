@@ -1,13 +1,25 @@
 WHEN YOU GET BACK:
+Wait:
+https://b.cdata.com/bugz-ns/show_bug.cgi?id=13126
+	SFTPDrive/NetDrive
 https://b.cdata.com/bugz-ns/show_bug.cgi?id=13089
+	SFTPDrive Ipswitch
+https://b.cdata.com/bugz-ns/show_bug.cgi?id=13118
+	SSLEnabledProtocols IPW Linux Platform. Make sure you have a list in order for this bug
+	<Peter.Windmeijer@ivanti.com>
+Allan - Make sure spencer is ok with beginfile and endfile for delete. Email him with an update
+		https://b.cdata.com/bugz-ns/show_bug.cgi?id=13093
 
-- COME UP WITH A BETTER METHOD FOR KNOWING THE BUGS THAT NEED COMMENTS AND RITUALLY COMMENTING ON THEM FIRST THING
-- continue SBB BCB, java demos
+Customers:
+
+- article updates 
+- coordinate sbb demos with aidan
 - investigate import putty sessions
 	+ See what PuTTY actually stores in the registry (and where)
 	+ See what the WinSCP behavior is, what it actually imports
 		and come up with an idea of what the behavior should be for SFTP Drive (when should we ask to import? Should we let them select which ones to import? What does WinSCP do? Etc.)
 		Write it all up in a bug.
+- Win-sshfs much faster
 
 - add support to find-product for opening the installation directory after install. fix find product for ncp4a
 	+ fix message for searching for accidentally searching for a beta project that was moved to full release
@@ -20,18 +32,21 @@ UPDATE
 LOW PRIO
 
 WAITING
--*Text editor prompts https://b.cdata.com/bugz-ns/show_bug.cgi?id=12809
+- *Text editor prompts https://b.cdata.com/bugz-ns/show_bug.cgi?id=12809
 	^^^ Update Clark
--investigate automatic detection of username and dynamically update SSH connection information on a drive https://b.cdata.com/bugz-ns/show_bug.cgi?id=12863
--investigate ssh tunnels https://b.cdata.com/bugz-ns/show_bug.cgi?id=12857
+- investigate automatic detection of username and dynamically update SSH connection information on a drive https://b.cdata.com/bugz-ns/show_bug.cgi?id=12863
+- investigate ssh tunnels https://b.cdata.com/bugz-ns/show_bug.cgi?id=12857
 	^^^respond to Tyler once heard back
 
 CUSTOMER NOTIFY
-<RBediwi@dfsa.ae> Raeef Bediwi: Security Tokens with SFTP library
-Exempll <alfonsotabo@gmail.com> Alfonso: SFTP Drive V2 SSH Tunnels
-utveckling@pakompetens.se - SFTP Drive isolated 
+- 
+- <RBediwi@dfsa.ae> Raeef Bediwi: Security Tokens with SFTP library
+- Exempll <alfonsotabo@gmail.com> Alfonso: SFTP Drive V2 SSH Tunnels
+- utveckling@pakompetens.se - SFTP Drive isolated 
 
 
+
+## HOME
 
 Fiddle
 Brush up on Diamond Creek sets
