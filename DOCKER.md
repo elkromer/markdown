@@ -1,14 +1,37 @@
 ---
 tags:
 	- Docker
-	- Syntax
+	- Swarm
+	- Kubernetes
+	- Compose
+	- Advanced
 ---
 
-# Docker
+# Working with Docker
+> Docker is a set of platform-as-a-service products that use OS-level virtualization to deliver software in packages called containers.  A container is a standardized unit of software.
 
-## Helpful debugging tips
+Docker is an open platform for developing, shipping, and running applications. It provides the ability to to package and run an application in an isolated environment. It enables you to separate your applications from your infrastructure so you can deliver software quickly.
 
-### `Command tips`
+## Docker Engine
+
+A client-server application with three major components. 
+* A server, called `Docker daemon` or `dockerd`.
+* A REST API which programs can use to talk to the daemon to instruct it what to do
+* A command-line interface client (the `docker` command).
+
+![Docker Engine](/resources/docker-daemon-visualization.png)
+
+### Docker Objects Overview
+
+* `Images`: A template with instructions for creating a container. The binaries, libraries, and source code that make up the application.
+* `Containers`: A runnable instance of an image.
+* `Services`: Allow you to scale containers across multiple Docker daemons which all work together. A service allows you to define the desired state, such as the number of replicas of the service that must be available at any given time.
+
+## Rundown
+
+This rundown assumes you have written a dockerfile that builds an image successfully.
+
+### A quick note on Docker commands
 
 In the beginning days of docker containers could be managed with commands that look like this:
 
@@ -33,88 +56,192 @@ Now since there are so many new docker commands, it is preferred to use the mana
 > ...
 ```
 
+### What's in an Image
 
+The image contains the app binaries and dependencies as well as metadata about how to run the image. **It's not booting up a full OS.** That is one of the defining differences between a running image and a virutal machine. It is really just starting an application. 
 
-## Container tips
+There is no kernal and there are no kernal drivers. The kernal is actually provided by the host OS. The image can be as small as a single file or as large as multiple gigabytes.
 
-If the container is crashing then `docker logs` may not contain anything useful. What is the error code in `docker ps -a`?
-
-The next best thing to do is override the default entrypoint with a terminal and try the command yourself:
-```
-> docker run -p 183:1883 -it --entrypoint /bin/bash 6ac7bf7b673a
-root@043058f0fd8d:/# /usr/sbin/mosquitto
-```
-
-### Running an application in a container
-
-If you are starting an applicaiton in a container at runtime (for example, launching `sshd` when the container runs ), and that application reports an error when the container is started, first make sure you are running the application with the correct arguments. Then, if you are still seeing an error, make sure the dockerfile line endings are `LF` terminated and not `CRLF` terminated.
-
-### Starting an interative shell in a running container
-
-You can always start an interactive shell in a running container by executing the following command. Make sure to use the container Id and not the image Id.
-```
-> docker exec -it 6ac7bf7b673a /bin/bash
-```
-
-
-### Getting logs
-
-The `docker logs` command shows information logged by a running container.
+Images are designed using the union filesystem concept of "making layers about the changes". All images in the beginning start from a blank layer known as `SCRATCH`. Every set of changes that happens after that on the filesystem in the image is another layer. The output of the below command shows the layers contained within the image from the bottom-up.
 
 ```
-> docker logs 21da4564aeae
-1578336525: mosquitto version 1.4.15 (build date Tue, 18 Jun 2019 11:42:22 -0300) starting
-1578336525: Using default config.
-1578336525: Opening ipv4 listen socket on port 1883.
-1578336525: Opening ipv6 listen socket on port 1883.
+docker image history nginx
+```
+To create an image, you can use `docker build ...` which is equivalent to 
+
+```
+docker image build . -f Dockerfile
 ```
 
-### Logging drivers
+### Working with Containers
 
-Docker includes multiple logging mechanisms to help get information from running containers and services. Each docker daemon has a default logging driver which each container uses unless you configure it to use a different logging driver. **Warning: if you use a different logging driver, `docker logs` may not show useful information**.
+From the perspective of a running container, the underlying image it was started from is read-only. Any changes to a container are written to the writable container layer and will persist across stopping and starting. Once the container is destroyed, the data is destroyed. 
 
-## Storage tips
+How do you get into the container once its started? SSH servers are not necessary. 
 
-By default, all files created inside a container are stored on a writable container layer. Data does not persist when the container no longer exists. You can't easily move data elsewhere. 
+**Option 1** is to call `docker run` and specify the `--tty` and `--interactive` options and specify an alternate command. The specified command will overwrite the `CMD` specified in the dockerfile.
 
-There are two options for persistent file storage for containers: `volumes` and `bind mounts`.  No matter which way you choose, it looks the same in the container (either a directory or individual file in the container's filesystem).
+```
+docker container run -it --name test nginx bash
+```
+*Note: once you type `exit` the container stops because `CMD` was overwritten with `bash`*
 
-### volumes
+**Option 2** is to call `docker start` on a stopped container and specify the `--attach` and `--interactive` options.
 
-Volumes are stored in a part of the host filesystem which is managed by docker `/var/lib/docker/volumes`. **Non-docker processes should not modify this part of the filesystem**.
+```
+docker container start nginx -ai
+```
 
-Volumes are created by docker with `docker volume create`, which creates a directory on the host filesystem. When you mount the volume into a container, this directory is what is mounted into the container. You can remove unused volumes with `docker volume prune`
+**Option 3** is used when you want to create a shell inside a container that is already running a program.
 
-Good for sharing data among running containers, good for storing data on a remote host or cloud provider rather than locally, help to decouple the configuration of the docker host from the container runtime. You can always stop the containers using the volume and back up the volume's directory if you need to migrate docker hosts.
+```
+docker container exec -it nginx bash
+```
 
-### bind mounts
+### Persistent Data
 
-Are stored anywhere on the host filesystem. Non-docker processes can modify them at any time. 
+Containers are meant to be temporary and disposable. What about the unique data your app produces? Ideally the applicaiton shouldn't produce data alongside the application binaries. **Separation of concerns**. You can use Volumes or Bind Mounts to keep the unique data elsewhere and redeploy changes to the container while keeping the data intact.
 
-Available since the early days of docker but have limited functionality compared to volumes. You can't use docker commands to directly manage bind mounts.
+* `Volumes` are a configuration option for a container that creates a special location outside of the container union filesystem to store unique data. Preserves the data across removals and allows attachment to any container you want.
+* `Bind Mounts` are a mapping of a host directory or file into a container.
 
-Good for sharing configuration files from the host machine to the container, sharing source code or build artifacts, good when the directory structure of the docker host is guaranteed to be consistent with the bind mounts the containers require.
+To tell a container it should use a **volume** you have three options.
 
-### Free up space
+**Option 1** is to add a `VOLUME` command to the dockerfile, which tells docker when we start a container from this image to actually create a new volume location and assign it to this directory in the container. Any files you put in that location will outlive the container until the volume is deleted.
 
-Docker takes a conservative approach to cleaning up unused objects (*nothing is done unless you tell it to*). For each type of object, docker provides a prune command and additional filter expressions. `docker system prune` lets you clean up multiple objects.
+```
+VOLUME /var/lib/mysql
+```
+*This creates a new unnamed volume every time a container is started.*
 
-`docker image prune`
+**Option 2** is to specify a named volume in the `run` command. It allows you to specify a new volume, use an existing volume,
 
-Cleans up dangling images: those that are not tagged and not referenced by any container. To remove all images which are not used by existing containers use the `-a` flag.
+```
+docker container run -d --name mysql -e MYSWL_ALLOW_EMPTY_PASSWORD=true -v mysql-db:/var/lib/mysql mysql
+```
 
-`docker container prune`
+**Option 3** is to create a volume with the `docker volume create` command and attach it to the container later. This is really only used when you want to create a volume with a specific driver.
 
-Containers are not automatically removed unless you started it with the `--rm` flag. B y default, all stopped containers are removed.
+To tell a container it should use a **bind mount** you must do it like this depending on the host:
 
-`docker volume prune`
+**Mac/Linux**:
+```
+docker container run ... -v /Users/reese/stuff:/path/container
+```
+**Windows**
+```
+docker container run ... -v //c/Users/reese/stuff:/path/container
+```
 
-Volumes are never removed automatically because that could destroy data. By default, all unused volumes are removed. 
+Basically just two locations pointing to the same file(s). Skips the union filesystem and host files overwrite any in the container. In the docker run command, you can use the keywords `$(pwd)` on linux or `${pwd}` on Windows on the left side of the `--volume` option
 
-`docker network prune`
+### Working with Networks
 
-Networks don't take up much spaced but they do create iptables rules, bridge network devices, routing table entries, etc. By default, all unused networks are removed. 
+You can't assume from minute to minute the ip addresses of the containers on Docker's private network to stay the same as containers are created and destroted. That is why automatic DNS name resolution is a big deal. Virtual networks can be created like this:
 
-`docker system prune --volumes`
+```
+docker network create my_app_net
+```
 
-Clean up everything.
+**Note that automatic DNS name resolution is not available on the default bridge network without additional configuration.** That is why it is usually recommended to create your own network rather than use the default network, especially when deploying multiple containers that need to talk to each other.
+
+
+You can specify a network when creating a container:
+
+```
+docker container run -d --name nginx --network my_app_net nginx
+```
+
+Containers on the same network can find each other based on their hostnames (container names). Ping example:
+
+```
+> docker container exec -it openssh76 ping nginx
+PING nginx (172.18.0.2) 56(84) bytes of data.
+64 bytes from nginx.my_app_net (172.18.0.2): icmp_seq=1 ttl=64 time=0.673 ms
+64 bytes from nginx.my_app_net (172.18.0.2): icmp_seq=2 ttl=64 time=0.086 ms
+64 bytes from nginx.my_app_net (172.18.0.2): icmp_seq=3 ttl=64 time=0.061 ms
+64 bytes from nginx.my_app_net (172.18.0.2): icmp_seq=4 ttl=64 time=0.064 ms
+^C
+
+> docker container exec -it nginx ping openssh76
+PING openssh76 (172.18.0.3) 56(84) bytes of data.
+64 bytes from openssh76.my_app_net (172.18.0.3): icmp_seq=1 ttl=64 time=0.069 ms
+64 bytes from openssh76.my_app_net (172.18.0.3): icmp_seq=2 ttl=64 time=0.062 ms
+64 bytes from openssh76.my_app_net (172.18.0.3): icmp_seq=3 ttl=64 time=0.119 ms
+^C
+```
+
+Calling `docker network connect` effectively plugs in a NIC to the specified container.
+
+## Docker Compose
+
+Configure relationships between containers! Why? Create one-liner development environment startups.
+
+1. YAML-formatted file that describes our solution options `docker-compose.yml`
+2. A CLI tool `docker-compose` used for local dev/test automation
+
+Good for replacing scripts that call Docker `run`. With the beginning of v1.13 they can be used with `docker` directly with Swarm. 
+
+A template for `docker-compose`:
+
+```yml
+version: '3.1'  # if no version is specificed then v1 is assumed. Recommend v2 minimum
+
+services:  # containers. same as docker run
+  servicename: # a friendly name. this is also DNS name inside network
+    image: # Optional if you use build:
+    command: # Optional, replace the default CMD specified by the image
+    environment: # Optional, same as -e in docker run
+    volumes: # Optional, same as -v in docker run
+  servicename2:
+
+volumes: # Optional, same as docker volume create
+
+networks: # Optional, same as docker network create
+```
+An example:
+```yml
+version: '2'
+
+services:
+
+  wordpress:
+    image: wordpress
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: example
+      WORDPRESS_DB_PASSWORD: examplePW
+    volumes:
+      - ./wordpress-data:/var/www/html
+
+  mysql:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: examplerootPW
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: example
+      MYSQL_PASSWORD: examplePW
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
+```
+
+### docker-compose CLI
+
+Tool comes with Docker for Windows but is a separate download for Linux. 
+* `docker compose up` sets up volumes/networks and starts all containers
+* `docker compose down` stops all containers and removes containers/volumes/networks
+
+If all your projects had a Dockerfile and a docker-compose.yml then "new developer onboarding" would be as simple as:
+
+```
+git clone github.com/some/repo
+docker-compose up
+```
+
+A lot of the commands you use in docker are available in docker-compose. For example, `-d` for detach, `logs` for logs, `--help`, etc.
