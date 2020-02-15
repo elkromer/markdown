@@ -25,18 +25,55 @@ The `EXEC` command can be used as an alternative to avoid shell string munging a
 
 ## CMD
 
-There can be only one `CMD` command in a dockerfile. **The main purpose of `CMD` is to provide defaults for an executing container**.  The defaults can include an executable or they can omit the executable, in which case you must specify an `ENTRYPOINT` instruction as well.
+There can be only one `CMD` command in a dockerfile. **The main purpose of `CMD` is to provide defaults for an executing container**.  The defaults can include an executable or they can omit the executable, in which case you must specify an `ENTRYPOINT` instruction as well. The best use is to set the image's main command, allowing that image to be run as though it was that command (and use `CMD` as the default flags). **Its main purpose is to allow you to configure a container that will run as an executable**
 
-```
+```docker
 CMD ["executable","param1","param2"] (exec form, this is preferred)
-CMD ["param1","param2"] (as default parameters to ENTRYPOINT)
 CMD command param1 param2 (shell form)
+CMD ["param1","param2"] (as default parameters to ENTRYPOINT)
 ```
 When used in the shell or exec formats, the `CMD` instruction sets the command to be executed when running the image.  The `CMD` command should be used to run the software contained by your image, along with any arguments. 
 
-`CMD` should almost always be used in exec form. In most other cases, `CMD` should be given an interactive shell for example, `CMD ["perl", "-de0"]`, `CMD ["python"]`, or `CMD ["php", "-a"]`. Using this form means that when you execute something like `docker run -it python` you'll get dropped into a usable shell. 
+`CMD` should almost always be used in exec form. In most other cases, `CMD` should be given an interactive shell for example, `CMD ["perl", "-de0"]`, `CMD ["python"]`, or `CMD ["php", "-a"]`. Using this form means that when you execute something like `docker run -it python` you'll get dropped into a usable shell. See entrypoint for more information about the third use-case of CMD.
 
-Entrypoint does something similar to `CMD` but is really completely different. It is really only used in conjunction with `CMD` when the expected users already know how `ENTRYPOINT` works. The best use is to set the image's main command, allowing that image to be run as though it was that command (and use `CMD` as the default flags). **Its main purpose is to allow you to configure a container that will run as an executable**
+## ENTRYPOINT
+
+Entrypoint does something similar to `CMD` but is really completely different. It is really only used in conjunction with `CMD` when the expected users already know how `ENTRYPOINT` works. In most cases it works like this: a bash script is passed to `ENTRYPOINT` and the strings passed to `CMD` are then passed as arguments to the bash script. For example...
+
+```docker
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["postgres"]
+```
+
+When the container starts up, the command to be executed looks like this:
+
+```bash
+sh -c 'docker-entrypoint.sh postgres'
+```
+
+Some conditional statements can be used on the arguments to initialize the container. The last line of the script must be `exec "#@"`.
+
+```bash
+#!/bin/bash
+set -e
+
+if [ "$1" = 'postgres' ]; then
+    chown -R postgres "$PGDATA"
+
+    if [ -z "$(ls -A "$PGDATA")" ]; then
+        gosu postgres initdb
+    fi
+
+    exec gosu postgres "$@"
+fi
+
+exec "$@"
+```
+
+The exec command given becomes the container's PID 1. `$@` is a shell variable that means "all the arguments", so that leaves us with `exec <arguments from cmd>`
+
+Two forms of Entrypoint:
+
 
 ```
 ENTRYPOINT ["executable", "param1", "param2"] (exec form, preferred)
@@ -45,6 +82,7 @@ ENTRYPOINT command param1 param2 (shell form)
 ```
 $ docker run s3cmd
 ```
+// TODO
 
 Commandline arguments to `docker run s3cmd` will be appended after all elements in an exec form `ENTRYPOINT`, and will `CMD`. `docker run s3cmd -d` will pass the `-d` argument to the entry point. **Only the last `ENTRYPOINT` instruction will have an effect**.
 
