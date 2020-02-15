@@ -135,6 +135,63 @@ docker container run ... -v //c/Users/reese/stuff:/path/container
 
 Basically just two locations pointing to the same file(s). Skips the union filesystem and host files overwrite any in the container. In the docker run command, you can use the keywords `$(pwd)` on linux or `${pwd}` on Windows on the left side of the `--volume` option
 
+### Transferring containers and images
+
+If you need to migrate a container to a new machine you have a couple of options. The best option to use would depend on your end goal. In most situations, you have a container already running on machine A and would like to (1) move the container's data and associated image to machine B and (2) start the container again without losing any data.
+
+Your best bet in this scenario is to `commit` the changes in the container to an image, `save` the image to a tarball file, and `load` the image into docker on the new machine. The `save` command preserves the history, layers, and entrypoint so all you need to do is run the image once it is loaded. 
+
+```
+PS C:\Users\kouey> docker run -d nginx
+f58edaad2a5a7b66af08d4c268a520063998312902d08b023c58e5651d48d579
+
+PS C:\Users\kouey> docker exec -it f bash
+root@f58edaad2a5a:/# touch newfile.txt     # add some container data
+
+PS C:\Users\kouey> docker commit f58 nginx-with-data
+sha256:1c93f0d5f515d509445b9708037495bdba3a4c348c1515b42dfce111b9efe037
+
+PS C:\Users\kouey> docker save nginx-with-data -o c:\temp\nginx-bak
+
+PS C:\Users\kouey> docker container rm f58 -f; docker system prune -a -f
+
+PS C:\Users\kouey> docker load -i C:\temp\nginx-bak
+488dfecc21b1: Loading layer [==================================================>]  72.48MB/72.48MB
+Loaded image: nginx-with-data:latest
+
+PS C:\Users\kouey> docker run -d --name new-nginx nginx-with-data
+a700cac31772381ce8b2848b076723bc8a8c66ff53398625f2d7c5cbd2788312
+
+PS C:\Users\kouey> docker exec -it a700 ls
+bin   dev  home  lib64  mnt          opt   root  sbin  sys  usr
+boot  etc  lib   media  newfile.txt  proc  run   srv   tmp  var
+
+PS C:\Users\kouey> docker container top new-nginx     # PROOF
+PID                 USER                TIME                COMMAND
+4736                root                0:00                nginx: master process nginx -g daemon off;
+4781                101                 0:00                nginx: worker process
+```
+
+The alternative is to `export` the running container to a tarball file and `import` it on the new machine. **Keep in mind that export flattens the image. It removes the history, layers, and entrypoint and just keeps the filesystem.**
+
+The `import` command imports the tarball **as an image**. To run a container based off the image you will need to exec in or specify a new entrypoint command.
+
+```
+> docker import c:\Users\kouey\Desktop\exported-nreese
+sha256:505a230f0382cddb0ebf1ac27b7fb26f12560febb2875a32f0a8377269388bbd
+
+> docker image ls -a
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+<none>              <none>              505a230f0382        3 days ago          125MB
+nginx               latest              2073e0bcb60e        12 days ago         127MB
+
+> docker run -d 505a230f0382
+C:\Program Files\Docker\bin\docker.exe: Error response from daemon: No command specified.
+See 'C:\Program Files\Docker\bin\docker.exe run --help'.
+```
+
+This is particularly useful in situations where you just want to save the files on the system and have no interest in running the image as a container anymore. Export generates a smaller tarball file.
+
 ### Working with Networks
 
 You can't assume from minute to minute the ip addresses of the containers on Docker's private network to stay the same as containers are created and destroted. That is why automatic DNS name resolution is a big deal. Virtual networks can be created like this:
