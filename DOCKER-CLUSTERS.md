@@ -54,4 +54,28 @@ The main node management command. There can only be one `Leader` manager node at
 
 Service in a swarm replaces the `docker run`. The main service management command.
 
+## Overlay Multi-Host Networking
 
+When creating a network like you are used to creating it, you can specify a special network driver called `overly`, which is like specifying a swarm-wide bridge network. The containers on other hosts can access each other like they are on the same VLAN. 
+
+This is only for intra-swarm communication. The overlay driver doesn't play a huge role in the traffic coming into the network. Conatiners on the same overlay network are accessible by their container name. 
+
+You can create a logical separation between the frontend and backend by attaching a container to two overlay networks. E.g. A middleman between the website and database. 
+
+## Routing Mesh
+
+Routes ingress (incoming) packets for a Service to the proper Task. Spans all nodes in a Swarm. The routing mesh also load balances Swarm Services across their Tasks. 
+
+**Internal representation**:
+
+![](/resources/docker-routing-vip.png)
+
+When `docker service create` executes, a virtual IP (VIP) is created based on the DNS name of the service in the overlay network. Any other containers in the overlay network `my-network` that need to talk to the service can do so using the VIP. The VIP will properly load balance to all the tasks in the service.
+
+All of the above holds true for internal traffic among containers in the overlay network. When talking about traffic coming in from the outside world, the routing mesh has different behavior.
+
+You can see the routing mesh work by running a quick test: Lets say you have 1 replica of a webserver running on one node in your three-node swarm. Then you can enter the IP address of *any* node on the swarm and be directed to the particular node that is running the website.
+
+![Routing Mesh](/resources/docker-routing-mesh.png)
+
+**All nodes listen on published ports for external traffic** and the swarm load balancer reroutes the traffic to the appropriate node based on the load balancing rules.
