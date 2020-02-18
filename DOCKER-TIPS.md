@@ -4,11 +4,9 @@ tags:
 	- Troubleshooting
 ---
 
-# Docker
+# Docker Troubleshooting
 
-## Background
-
-There are two types of containers: Windows and Linux containers. Both are still actively developed and evolving rapidly. The types of containers are independent of the installation options for docker.
+## Installation
 
 Docker for Windows is a only works on Windows Pro and Enterprise editions. To use Docker on a Home edition, you must use Docker Toolbox (*only supports Linux containers*). 
 
@@ -27,7 +25,7 @@ You should also manually download **Machine** and **compose**.
 
 These will need to be manually updated!!
 
-## Managing Containers tips
+# Managing Containers
 
 If the container is crashing then `docker logs` may not contain anything useful. What is the error code in `docker ps -a`?
 
@@ -76,7 +74,7 @@ The `docker logs` command shows information logged by a running container.
 
 Docker includes multiple logging mechanisms to help get information from running containers and services. Each docker daemon has a default logging driver which each container uses unless you configure it to use a different logging driver. **Warning: if you use a different logging driver, `docker logs` may not show useful information**.
 
-## Managing Docker Storage tips
+# Docker Storage 
 
 By default, all files created inside a container are stored on a writable container layer. Data does not persist when the container no longer exists. You can't easily move data elsewhere. 
 

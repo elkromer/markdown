@@ -1,8 +1,6 @@
 ---
 tags:
 	- Docker
-	- Swarm
-	- Kubernetes
 	- Compose
 	- Advanced
 ---
@@ -11,6 +9,8 @@ tags:
 > Docker is a set of platform-as-a-service products that use OS-level virtualization to deliver software in packages called containers.  A container is a standardized unit of software.
 
 Docker is an open platform for developing, shipping, and running applications. It provides the ability to to package and run an application in an isolated environment. It enables you to separate your applications from your infrastructure so you can deliver software quickly.
+
+There are two types of containers: Windows and Linux containers. Both are still actively developed and evolving rapidly. 
 
 ## Docker Engine
 
@@ -175,7 +175,7 @@ Calling `docker network connect` effectively plugs in a NIC to the specified con
 
 ## Docker Compose
 
-Configure relationships between containers! Why? Create one-liner development environment startups.
+Configure relationships between containers! Why? Create one-liner development environment startups. Docker compose consists of two things:
 
 1. YAML-formatted file that describes our solution options `docker-compose.yml`
 2. A CLI tool `docker-compose` used for local dev/test automation
@@ -199,7 +199,10 @@ volumes: # Optional, same as docker volume create
 
 networks: # Optional, same as docker network create
 ```
-An example:
+
+Good for defining a multi-container service. Takes all the work out of creating `docker run` commands and simplifies your container startup scripts.
+
+You can even specify persistent data storage in a compose file. Many images on docker already have built-in support for databases by setting the appropriate configuration in environment variables. The below file is a good example:
 ```yml
 version: '2'
 
@@ -215,7 +218,7 @@ services:
       WORDPRESS_DB_USER: example
       WORDPRESS_DB_PASSWORD: examplePW
     volumes:
-      - ./wordpress-data:/var/www/html
+      - ./wordpress-data:/var/www/html # bindmount for live edits
 
   mysql:
     image: mariadb
@@ -225,17 +228,41 @@ services:
       MYSQL_USER: example
       MYSQL_PASSWORD: examplePW
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql #volname:/path/on/container
 
 volumes:
-  mysql-data:
+  mysql-data: # definition
 ```
+The `mysql` container stores the data we want to preserve in its `/var/lib/mysql` directory so we just specify **the name of a volume** and **a volume definition** to tell compose to create a volume for us.
+
+### Image Building in a Compose File
+
+Another thing compose can do for you is build the images at runtime. It can optionally rebuild them every time but it uses the image cache by default. 
+
+```docker
+services:
+  proxy:
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    image: nginx-custom
+    ports:
+      - '80:80'
+```
+
+In the above file, docker-compose will first look for an image called `nginx-custom` in the image cache and if it doesn't find it, it will use the `build:` options to create an image and name it `nginx-custom`.
+
+
 
 ### docker-compose CLI
 
-Tool comes with Docker for Windows but is a separate download for Linux. 
+Compose comes with Docker for Windows but is a separate download for Linux. The two main commands that do everything are:
 * `docker compose up` sets up volumes/networks and starts all containers
-* `docker compose down` stops all containers and removes containers/volumes/networks
+* `docker compose down` stops all containers and removes containers/volumes/networks. 
+
+Volumes are not removed by default. You must specify the `--volume` option in `docker-compose down` to remove a volume. A lot of the commands you use in docker are available in docker-compose. For example, `-d` for detach, `logs` for logs, `--help`, etc.
+
+### Developer onboarding just got easier
 
 If all your projects had a Dockerfile and a docker-compose.yml then "new developer onboarding" would be as simple as:
 
@@ -244,4 +271,3 @@ git clone github.com/some/repo
 docker-compose up
 ```
 
-A lot of the commands you use in docker are available in docker-compose. For example, `-d` for detach, `logs` for logs, `--help`, etc.
