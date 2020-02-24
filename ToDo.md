@@ -1,19 +1,28 @@
-WHEN YOU GET BACK:
-Wait:
-https://b.cdata.com/bugz-ns/show_bug.cgi?id=13126
-	SFTPDrive/NetDrive
-https://b.cdata.com/bugz-ns/show_bug.cgi?id=13089
+!!!!Start out the day by preparing to work on the bugs you reported and starting any builds that need to be started!!!!!
+
+On my plate...
+[Waiting:]
+* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13089
 	SFTPDrive Ipswitch
-https://b.cdata.com/bugz-ns/show_bug.cgi?id=13118
-	SSLEnabledProtocols IPW Linux Platform. Make sure you have a list in order for this bug
-	<Peter.Windmeijer@ivanti.com>
-Allan - Make sure spencer is ok with beginfile and endfile for delete. Email him with an update
-		https://b.cdata.com/bugz-ns/show_bug.cgi?id=13093
+* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13147
+	Driver collides with docker for windows
+* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13126
+	Respond about importance... Waiting for customer response...
+	SFTPDrive/NetDrive decoding filenames
+* Guy Berlin 10.2 BLE deployment issue
 
-Customers:
+[Testing:]
+* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13118	
+	Linux platform SSLEnabledProtocols SSLStatus
 
+
+
+[Reading:]
+* NS-SS069901758R - Cannot get TripleDES Decryption to match up
+
+	
+Regular Todo:
 - article updates 
-- coordinate sbb demos with aidan
 - investigate import putty sessions
 	+ See what PuTTY actually stores in the registry (and where)
 	+ See what the WinSCP behavior is, what it actually imports

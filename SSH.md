@@ -5,24 +5,43 @@ tags:
 
 # Secure Shell Transport Layer Protocol (SSH)
 
-## Layers
-- ### Connection Protocol 
-	Multiplexes the encrypted tunnel into several logical channels. Runs on top of the user authentication protcol.
-	
-- ### User Authentication Protocol 
-	Authenticates the client to the server. Runs on top of the transport protocol.
+> [RFC 4250](https://tools.ietf.org/html/rfc4250) defines protocol assigned numbers.
+> [RFC 4251](https://tools.ietf.org/html/rfc4251) defines SSH protocol architecture.
 
-- ### Transport Layer Protocol 
-	Provides server authentication, confidentiality, and integrity with perfect forward secrecy
+There are three major components of the SSH protocol:
+
+- ## Transport Layer Protocol ([RFC 4253](https://tools.ietf.org/html/rfc4253))
+	Typically runs on top of TCP/IP. Provides server authentication, confidentiality, and integrity protection with perfect forward secrecy. 
 	
 	> PFS is essentially defined as the cryptographic property of a key-establishment protocol in which the compromise of a session key or long-term private key after a given session does not cause the compromise of any earlier session
 	
 	Data integrity is protected by including with each packet a MAC that
 	is computed from a shared secret, packet sequence number, and the
-	contents of the packet.		
+	contents of the packet.	Authentication is performed in this layer but is host-based ("am I talking to the right host?")
 
------------------------------------------
+- ## User Authentication Protocol ([RFC 4252](https://tools.ietf.org/html/rfc4252))
+	Runs on top of the transport protocol. Authenticates the client to the server. 
 
+	* `SSH_MSG_USERAUTH_REQUEST`
+	* `SSH_MSG_USERAUTH_SUCCESS`/`SSH_MSG_USERAUTH_FAILURE`
+
+	The server keeps an record of the authentication methods that can be used at any given time. The client has the freedom to try the methods listed by the server in any order, in a `SSH_MSG_USERAUTH_REQUEST`. 
+
+	The server can respond with either `SSH_MSG_USERAUTH_FAILURE` or `SSH_MSG_USERAUTH_SUCCESS`. The failure message can contain a "partial success" indicator used in multi-step authorization. 
+
+- ## Connection Protocol ([RFC 4254](https://tools.ietf.org/html/rfc4254))
+	 Runs on top of the user authentication protcol and transport protocol. Multiplexes the encrypted tunnel into several logical channels. Provides interactive login sessions, remote execution of commands, forwarded TCP/IP connections, and forwarded X11 connections. Consists of...
+	 
+	 - **Global Requests**
+	 - **Channels**
+
+	 Global Requests control the state of the remote machine. 
+	 
+	 Either side may open a channel and multiple channels are multiplexed into a single "connection".
+	 
+	 When either party wishes to open a channel, it sends a `SSH_MSG_CHANNEL_OPEN` containing the initial window size.
+
+	 When either party wishes to terminate the channel, it sends `SSH_MSG_CHANNEL_CLOSE`. Once both sides have sent and received this message the channel is considered closed.
 
 ## Transport Layer Architecture 
 
@@ -57,7 +76,7 @@ tags:
 	- C validates hostkey using certificates or a local database
 	- C mathmatically computes `K` and verifies the signature on `H`
 	
-	*The key exchange produces two values: a shared secret `K`, and an exchange hash `H`.*
+	*The key exchange produces two values: a shared secret `K`, and an exchange hash `H`. The communication is encrypted after this point.*
 
 - #### Service Request 
 	The user requests a service, usually `ssh-userauth` or `ssh-connection`.
@@ -74,21 +93,65 @@ tags:
 	string    description in ISO-10646 UTF-8 encoding [RFC3629]
 	string    language tag [RFC3066]
 	```
-	
-- #### TODO...
 
-## Packet format
+## Authentication Layer Architecture
+
+- #### Authentication Request
+	+ Client sends `SSH_MSG_USERAUTH_REQUEST` using the `none` method name.
+	+ If no authentication is needed, the server must return `SSH_MSG_USERAUTH_SUCCESS`. Otherwise, the server must return `SSH_MSG_USERAUTH_FAILURE` and MAY return a list of acceptable methods with it. 
+	+ The client can send another `SSH_MSG_USERAUTH_REQUEST` to force the server to abandon the previous authentication attempt. 
+		+ Some servers have a limit on the number of failed authentication attempts. The recommended value is 20.
+	+ The server sends `SSH_MSG_USERAUTH_FAILURE` if authentication was rejected. Otherwise, authentication is complete when the server has responded with `SSH_MSG_USERAUTH_SUCCESS`.
+
 ```
-uint32    packet_length
-byte      padding_length
-byte[n1]  payload; n1 = packet_length - padding_length - 1
-byte[n2]  random padding; n2 = padding_length
-byte[m]   mac (Message Authentication Code - MAC); m = mac_length
+      byte      SSH_MSG_USERAUTH_REQUEST
+      string    user name in ISO-10646 UTF-8 encoding [RFC3629]
+      string    service name in US-ASCII
+      string    method name in US-ASCII
+      ....      method specific fields
 ```
+```			
+      byte         SSH_MSG_USERAUTH_FAILURE
+      name-list    authentications that can continue
+      boolean      partial success
+```
+```
+      byte      SSH_MSG_USERAUTH_SUCCESS
+```
+
+- #### Banner Message
+	+ The server can send an `SSH_MSG_USERAUTH_BANNER` message any time after authentication starts and before authentication is successful. 
+
+## Connection Layer Architecture
+
+The connection layer is a little strange. It consists of a channel mechanism and global requests.
+
+- #### Global Requests
+	+ Several kinds of requests affect the state of the remote end globally, independent of any channels. For example, to start TCP/IP forwarding on a specific port. 
+	+ Both the client and server may send global requests at any time.
+
+```
+
+      byte      SSH_MSG_GLOBAL_REQUEST
+      string    request name in US-ASCII only
+      boolean   want reply
+      ....      request-specific data follows
+```
+- #### Channel Mechanism
+	+ When either side wishes to open a channel, it sends `SSH_MSG_CHANNEL_OPEN` with a particular [channel type](https://tools.ietf.org/html/rfc4250#section-4.9.1).
+		- A "session" is a remote execution of a program. The program can be a shell, application, command, or some built-in subsystem.
+	+ When either side wishes to close a channel, it sends `SSH_MSG_CHANNEL_CLOSE`. Upon receiving this message, a party must send back `SSH_MSG_CHANNEL_CLOSE` unless it already sent it. The channel is considered closed for a party once it has both sent and received `SSH_MSG_CHANNEL_CLOSE`.
+	+ Many channel types have specific extensions that are specific to it. All channel-specific requests are sent in a `SSH_MSG_CHANNEL_REQUEST`
+	+ Data transfer is done with `SSH_MSG_CHANNEL_DATA`
+	+ Window size specifies how many bytes *the other* party can send before it must wait for the window to be adjusted. Both parties adjust the window with `SSH_MSG_CHANNEL_WINDOW_ADJUST`
+
+
+
+## Data types
 - **byte**: A byte represents an arbitrary 8-bit value (octet).  Fixed length data is sometimes represented as an array of bytes, written byte[n], where n is the number of bytes in the array.
 - **boolean**: A boolean value is stored as a single byte.  The value 0 represents `FALSE`, and the value 1 represents `TRUE`.  All non-zero values MUST be interpreted as `TRUE`; however, applications MUST NOT store values other than 0 and 1.
-
-- **uint32**: Represents a 32-bit unsigned integer.  Stored as four bytes in the order of decreasing significance (network byte order).  For example: the value 699921578 (0x29b7f4aa) is stored as `29 b7 f4 aa`.
+- **uint32**: Represents a 32-bit unsigned integer.  Stored as four bytes in the order of decreasing significance (network byte order).  
+For example: the value 699921578 (0x29b7f4aa) is stored as `29 b7 f4 aa`.
 
 - **int64**: Represents a 64-bit unsigned integer.  Stored as eight bytes in the order of decreasing significance (network byte order).	  
 
