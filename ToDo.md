@@ -2,36 +2,34 @@
 
 On my plate...
 [Waiting:]
+* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13161
+	Importing PuTTY Sessions
 * https://b.cdata.com/bugz-ns/show_bug.cgi?id=13089
-	SFTPDrive Ipswitch
+	SFTPDrive Ipswitch. Waiting to be contacted by Paul
 * https://b.cdata.com/bugz-ns/show_bug.cgi?id=13147
-	Driver collides with docker for windows
+	Driver collides with docker for windows... Waiting for Volodymyr
 * https://b.cdata.com/bugz-ns/show_bug.cgi?id=13126
-	Respond about importance... Waiting for customer response...
 	SFTPDrive/NetDrive decoding filenames
-* Guy Berlin 10.2 BLE deployment issue
+	Respond about importance... Waiting for customer response...
+	Add a comment that we are still waiting.
+* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13160
+	SFTP Server virtual users
 
-[Testing:]
-* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13118	
-	Linux platform SSLEnabledProtocols SSLStatus
-
+[Ready:]
+* Write up SMTP Adapter
+	Spencer quote for the customer.
+* Do the UI for virtual users
 
 
 [Reading:]
-* NS-SS069901758R - Cannot get TripleDES Decryption to match up
-
 	
 Regular Todo:
 - article updates 
-- investigate import putty sessions
-	+ See what PuTTY actually stores in the registry (and where)
-	+ See what the WinSCP behavior is, what it actually imports
-		and come up with an idea of what the behavior should be for SFTP Drive (when should we ask to import? Should we let them select which ones to import? What does WinSCP do? Etc.)
-		Write it all up in a bug.
-- Win-sshfs much faster
-
+- Win-sshfs much fasterS
 - add support to find-product for opening the installation directory after install. fix find product for ncp4a
 	+ fix message for searching for accidentally searching for a beta project that was moved to full release
+	+ do -env linux and itll grab that installer instead
+	+ Find-product sbb skus
 - update licensing page wiht info about legacy web sites vs web applications
 	https://www.nsoftware.com/kb/xml/01020301.rst#rtk
 SMALL FIXES
@@ -48,7 +46,6 @@ WAITING
 	^^^respond to Tyler once heard back
 
 CUSTOMER NOTIFY
-- 
 - <RBediwi@dfsa.ae> Raeef Bediwi: Security Tokens with SFTP library
 - Exempll <alfonsotabo@gmail.com> Alfonso: SFTP Drive V2 SSH Tunnels
 - utveckling@pakompetens.se - SFTP Drive isolated 
