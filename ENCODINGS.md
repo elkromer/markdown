@@ -7,7 +7,6 @@ tags:
 
 # Characters, Character Sets, Encodings
 
-
 In the olden days, the only characters that mattered were good ol' unaccented English letters. We had a code for them called [ASCII](http://www.robelle.com/library/smugbook/ascii.html) which was able to represent every character using a number between 32 and 127 (only 7 bits needed). Everybody figured numbers 128-255 were up for grabs and developed their own code pages for the last 128 numbers. **This got solidified in the ANSI standard!** 
 > Greek users used 737. Isralis used 862. National versions of MS-DOS had dozens of these code pages installed on them. This presented issues when trying to install more than one code page on an older machine.
 
@@ -44,7 +43,7 @@ As you can see, the Unicode character set needs a Unicode character encoding sch
 
 ### UTF-16 and UCS-2
 
-The first way that was devised to store Unicode was **everything gets two bytes** (also called `UCS2` or `UTF-16`). 
+The first way that was devised to store Unicode was **everything gets two bytes** (also called `UCS2` or `UTF-16`). This is likely what causes the above misconception.
 
 | Word | UTF-16 BE Mode | UTF-16 LE Mode |
 | ----------- | ----------- | ----------- |
