@@ -6,19 +6,25 @@ On my plate...
 	Importing PuTTY Sessions
 * https://b.cdata.com/bugz-ns/show_bug.cgi?id=13089
 	SFTPDrive Ipswitch. Waiting to be contacted by Paul
-* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13147
-	Driver collides with docker for windows... Waiting for Volodymyr
 * https://b.cdata.com/bugz-ns/show_bug.cgi?id=13126
 	SFTPDrive/NetDrive decoding filenames
-	Respond about importance... Waiting for customer response...
+	Respond about importance... Waiting for customer response...D
 	Add a comment that we are still waiting.
-* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13160
-	SFTP Server virtual users
+* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13170
+	Waiting on response to quote...
+* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13190
+	Add support for CloudHub deployment logging
+	On deck
 
 [Ready:]
-* Write up SMTP Adapter
-	Spencer quote for the customer.
-* Do the UI for virtual users
+* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13160
+	SFTP Server virtual users
+	Do the UI 
+* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13175
+	Expose RuntimeLicense property...
+* Waiting for boris to add mdn receive mode
+* Talk to cloudhub
+* Write up licensing instructions for MuleSoft connectors in the help
 
 
 [Reading:]
