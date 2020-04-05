@@ -8,7 +8,9 @@ tags:
 # Writing Effective C++
 > Based on Effective C++ 3rd Edition by Scott Meyers
 
-## 1. Prefer the compiler to the preprocessor
+## 1. Constants
+
+### Prefer the compiler to the preprocessor
 
 Prefer `const`, `enum`, and `inline` to `#define`. C directives may be treated as if it's not exactly part of the language. A directive's symbolic name may never be seen by compilers because it is removed by the preprocessor before compilation. 
 
@@ -80,7 +82,7 @@ private:
 
 Lots of code employs the enum hack so you should recognize it when you see it. In fact, it is a fundamental technique of template metaprogramming. 
 
-## Use `const` whenever possible
+### Use `const` whenever possible
 
 The wonderful thing about `const` is it allows you to specify a semantic constraint - a particular object should not be modified - and compilers enforce that constraint. Whenever something should remain invariant you should label it constant, that way you enlist your compilers' aid in making sure the constraint isn't violated.
 
@@ -88,20 +90,16 @@ Outside of classes, you can use `const` for constants at the global scope, objec
 
 ```c++
 char greeting[] = "Hello";
-const char *p1 = greeting; 			// non-const pointer, const data
-char * const p2 = greeting; 			// const pointer,     non-const data
-const char * const p3 = greeting; 	// const pointer,     const data
+const char *p1 = greeting; 	//   non-const pointer, const data
+char * const p2 = greeting; //   const pointer, non-const data
+const char * const p3 = greeting; // const pointer, const data
 ```
+
+Some of the most powerful uses of `const` stem from its application to function declarations. Within a function declaration, `const` can refer to the function's return value, to individual parameters, and for member functions, to the function as a whole. Having a function is generally inappropriate unless you are writing `operator` functions and trying to reduce the incidence of programmer error.
 
 ### Analogy with Iterators
 
-STL Iterators are modeled on pointers, so an iterator acts much like a `T* pointer`. Declaring an iterator `const` is like declaring a pointer `const` (the third line above): The iterator isn't allowed to point to something different but the thing it points to may be modified. If you want an iterator that points to something that can't be modified (the STL analogue of a `const T* pointer`), you want a `const_iterator`.
-
-See cpp test code `2_const_always`
-
-### Final Notes
-
-Some of the most powerful uses of `const` stem from its application to function declarations. Within a function declaration, `const` can refer to the function's return value, to individual parameters, and for member functions, to the function as a whole. Having a function is generally inappropriate unless you are writing `operator` functions and trying to reduce the incidence of programmer error. 
+STL Iterators are modeled on pointers, so an iterator acts much like a `T* pointer`. Declaring an iterator `const` is like declaring a pointer `const` (the third line above): The iterator isn't allowed to point to something different but the thing it points to may be modified. If you want an iterator that points to something that can't be modified (the STL analogue of a `const T* pointer`), you want a `const_iterator`. 
 
 For simple constants, prefer `const` objects or `enums` to `#define`. Oh, and if you see any nonsense like this:
 
@@ -118,3 +116,13 @@ inline void callWithMax(const T& a, const T&b)
 	f( a>b ? a:b)
 }
 ```
+
+### Constant Member Functions
+
+The purpose of `const` on member functions is to identify which member functions may be invoked on `const` objects. This makes...
+1. the interface of a class easier to understand, and 
+2. makes it possible to work with `const` objects.
+
+This is crucial to writing efficient code. One of the most fundamental ways to improve a C++ program's performance is to pass objects by reference-to-const. The technique is only viable if there are `const` member functions with which to manupulate the resulting const-qualified objects.
+
+**Member functions differing only in their constness *can* be overloaded**

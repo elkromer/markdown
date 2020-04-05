@@ -62,7 +62,7 @@ If later you need more memory, the program has to ask the OS for more memory (ex
 
 ## Raw Pointers
 
-A pointer type stores the address of the location in memory where the actual data value is stored. Variables declared with `*` are referred to raw pointers and are access through `*` or `->`, also called dereferencing. Which one you use depends on whether you are dereferencing a pointer to a scalar or a pointer to a member in an object. It is no longer recommended to use raw pointers for object ownership due to evolution of the smart pointer. It is still useful and safe to use pointers for observing objects but if using them for object ownership do so with caution.
+A pointer type stores the address of the location in memory where the actual data value is stored. Variables declared with `*` are referred to raw pointers and are accessed through `*` or `->`, also called dereferencing. Which one you use depends on whether you are dereferencing a pointer to a scalar or a pointer to a member in an object. It is no longer recommended to use raw pointers for object ownership due to evolution of the smart pointer. It is still useful and safe to use pointers for observing objects but if using them for object ownership do so with caution.
 
 ![pointer](http://joequery.me/static/images/notes/double-pointers-c/img3.png)
 
