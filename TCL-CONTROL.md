@@ -39,7 +39,7 @@ Possible flags: `-exact`, `-glob`, `-regexp`, `--` (means no flag but it is nece
 `default` pattern: Matches only if no other patterns match. Works only on the last pattern. 
 
 ```tcl
-switch --exact -- $value {
+switch -exact -- $value {
 	foo { doFoo; incr count(foo) }
 	bar { doBar; incr count(bar) }
 	default { incr count(other) }

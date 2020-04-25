@@ -14,23 +14,19 @@ On my plate...
 	Waiting on response to quote...
 * https://b.cdata.com/bugz-ns/show_bug.cgi?id=13190
 	Add support for CloudHub deployment logging
-	On deck
 
 [Ready:]
+* Go over with spencer: articles comparing core connectors 
 * https://b.cdata.com/bugz-ns/show_bug.cgi?id=13160
-	SFTP Server virtual users
-	Do the UI 
-* https://b.cdata.com/bugz-ns/show_bug.cgi?id=13175
-	Expose RuntimeLicense property...
-* Waiting for boris to add mdn receive mode
-* Talk to cloudhub
-* Write up licensing instructions for MuleSoft connectors in the help
-
+	SFTP Server virtual users UI 
 
 [Reading:]
 	
 Regular Todo:
-- article updates 
+- (SBB .NET Core) https://b.cdata.com/bugz-ns/show_bug.cgi?id=13263
+- (.NET 4) https://b.cdata.com/bugz-ns/show_bug.cgi?id=13269
+- (Sterling) https://b.cdata.com/bugz-ns/show_bug.cgi?id=13261 
+- Mule takes precedence 
 - Win-sshfs much fasterS
 - add support to find-product for opening the installation directory after install. fix find product for ncp4a
 	+ fix message for searching for accidentally searching for a beta project that was moved to full release
@@ -55,7 +51,7 @@ CUSTOMER NOTIFY
 - <RBediwi@dfsa.ae> Raeef Bediwi: Security Tokens with SFTP library
 - Exempll <alfonsotabo@gmail.com> Alfonso: SFTP Drive V2 SSH Tunnels
 - utveckling@pakompetens.se - SFTP Drive isolated 
-
+- Chigurupati, Pooja <Pooja.Chigurupati@iqvia.com> - ANY AS2 FEATURES
 
 
 ## HOME
@@ -83,3 +79,26 @@ https://www.secureblackbox.com/kb/help/ref_gen_packages_ssh.html
 SecureBlackbox PRO (**USE THIS**)
 
 3A2D04203195DF976CFB869F68BB8B69EAB64C4EE44235AEE53F62656800D06EDC9CB85614F08976C3F012ECD2DA46B0F970B068DFB88B7F01397793667D79E4F5FD024A3697630A507CD7A045C09D1B3264D94EF6733F79B1A49CEE8E2BC933CA1E5E47857FCC3EB81FBBD33D5FF0F695797D06A98146FED6C643A22300B9DA7BAE9642E35BFD0AF8D357F4A14F769F139610E4F57079ED0CC8AF7791D08318ADBC03D364244CF46F2E305A519B6580F56A40F5F4C26F8A7AD5931E9C8308547073737A7585FD8E5E0D232483FF3B1294225D0683D0642B591694A8C11083D09A93BE98E134B05EFE9872A2BE9ED0308C1CD11CD7B0B9D364344CEC4B480358
+
+# REPORT
+
+Plan This Week
+--------------------
+• 
+• 
+• 
+• 
+
+Results This Week
+--------------------
+• 
+• 
+• 
+• 
+
+Plan for Next Week
+--------------------
+• 
+• 
+• 
+• 

@@ -53,7 +53,7 @@ lset new 1 0 "g h"
 => a {{g h} e} c
 ```
 
-Think of the middle arguments to `lset` like this: *The first middle element is the element index in the list variable which should be replaced. If a sublist is at that location, the second middle argument specifies the element in the sublist which should be replaced.*
+Think of the middle arguments to `lset` like this: *The middle element is the element index in this list which should be replaced. If a sublist is at that location, the second middle argument specifies the element in the sublist which should be replaced.*
 
 ### concat
 

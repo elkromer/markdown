@@ -137,16 +137,26 @@ format "%${lang}\$s" one un uno
 
 The `binary` commands provide conversion between strings and packed binary data.
 
-The `binary format` command takes values and packs them according to a template. The resulting binary value is returned:
+The `binary format` command creates a binary string from normal Tcl values (e.g. `TCL Variable -> Binary`). For example, given the values 16 and 22, it might produce an 8-byte binary string consisting of two 4-byte integers. The resulting binary value is returned:
 
 ```tcl
-binary format template value ?value...
+binary format formatString value ?value...
+```
+```tcl
+# to a binary string                     From binary data
+set bin              [binary format b5b* 11100 111000011010]
 ```
 
-The `binary scan` command extracts values from a binary string according to a similar template. This is useful for extracting data in a binary file. It assigns values to a set of Tcl variables:
+The `bin` variable contains unprintable binary. 
+
+The `binary scan` command does the opposite, it extracts values from a binary string according to a similar template (e.g. `Binary -> TCL Variable`). This is useful for extracting data in a binary file. It assigns values to a set of Tcl variables:
 
 ```tcl
-binary scan value template var ?var...
+binary scan string formatString var ?var...
+```
+```tcl
+binary scan $bin b5b* value1 value2
+#                     ^ 11100    ^ 111000011010   (in tcl variables)
 ```
 
 *Endianness* indicates the ordering of bytes within a multi-byte number. For example, consider the unsigned hexadecimal number `0x1234`, which requires at least two bytes to represent. In a big-endian ordering they would be `12 34`, while in a little-endian ordering, the bytes would be arranged `34 12`. 

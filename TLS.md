@@ -76,6 +76,10 @@ Provides privacy and data integrity between two communicating applications.
 ```
 6. `Finished` The client sends a finished message to verify the handshake was successful. Once the server has received the finished message from its peer it may begin to send and receive application data.
 
+**TLS Client Authentication**
+
+![Client Auth](/resources/tls-client-authentication.png)
+
 ### TLS Record Protocol 
 
 Takes messages to be transmitted, fragments the data into blocks, (optionally compresses the data), applies a keyed MAC, encrypts, and transmits the result. Received data is decrypted, verified, decompressed, reassembled, and then delivered to higher layers.

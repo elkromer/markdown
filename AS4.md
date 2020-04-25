@@ -6,9 +6,36 @@ tags:
 
 # Applicability Statement 4 (AS4)
 
-> AS4 is an open standard for the secure and payload-agnostic exchange of business-to-business documents using web services.  
+> AS4 is an open standard for the secure and payload-agnostic exchange of business-to-business documents using web services. It's a web-services upate to AS2, built largely on the OASIS ebMS 3.0 framework.
 
-> Historically the platform of B2B transactions has moved from communication over SMTP with value-added networks to Internet-based protocols free from data transfer fees imposed by VAN operators.
+Its lightweight nature makes it a relatively low-cost communications standard to implement for organizations with minimal IT infrastructure. AS4 is a SOAP-based web API layered over HTTP from a technical viewpoint and can be EDI from a business viewpoint.
+
+* More compatible with standard environments than AS2
+* Can transport any type of payload
+* Provides for rerouting messages and correlating them with past or future messages
+* Large file & compression support
+
+### Where is it used
+
+AS4 is increasingly being adopted in the European government and energy sectors and is also gaining increasing popularity and use among all manner of organizations modernizing their internal technologies as well as extending their standards-based internal integrations.
+
+### What is ebXML?
+
+Electronic Business using eXtensible Markup Language. A family of standards sponsored by OASIS and UN/CEFACT. The original project envisioned five layers of data specification, including XML standards for:
+* Business processes
+* Collaboration protocol agreements
+* Core data components
+* Messaging
+* Registries and repositories
+
+[ISO-15000] contains the five specifications:
+* Collaborative Partner Profile Agreement (ebCPP)
+* Messaging Service Specification (ebMS)
+* Registry Information Model (ebRIM)
+* Registry Services Specification (ebRS)
+* Core Components Specification (CCS)
+
+Any questions about SOAP or XML in AS4? Look at ebMS.
 
 ## What is AS4?
 
@@ -79,3 +106,17 @@ The meaning of **NOT** getting an expected Receipt is one of the following:
 1. The user message was lost and never received.
 2. The user message was received but the Receipt was never generated due to faulty configuration.
 3. The user message was received, the Receipt was set back but lost along the way.
+
+# ENTSOG AS4 Profile
+
+`European network of transmission system operators for gas`
+
+Usage profile based on OASIS ebMS 3.0 and an extended subset of the AS4 ebHandler conformance profile (for the gas community).
+
+Defines a messaging model, message packaging, message layer security, error handling, PKI...
+
+# PEPPOL AS4 Profile
+
+`Pan-european public procurement online`
+
+Facilitates becoming an access point in the PEPPOL community to enable cross-border trade. The mission statement of the OpenPEPPOL movement is to enable businesses to communicate electronically with any European government institution in the producrement process, increasing efficiency and reducing costs.

@@ -8,15 +8,28 @@ tags:
 
 [OFTP RFC 2204](https://tools.ietf.org/html/rfc2204) -> [OFTP2 RFC 5024](https://tools.ietf.org/html/rfc5024)
 
-Facilitates the transmission of a file between one or more locations in a way that is independent of the data communication network, system hardware and software environemnt.
+Facilitates the transmission of a file between one or more locations in a way that is independent of the data communication network, system hardware and software environment. Like all the Applicability Statement protocols, it can provide digitally signed electronic delivery receipts. Current version is `OFTP2`.
 
-### Background
+It isn't built on any familiar protocol underneath.
 
-Created in 1986, it was used for EDI between two business partners. Today it is mostly used by European car manufacturers. It isn't built on any familiar protocol underneath.
+### Where is is used
+
+Built specifically for B2B document exchange. Though it was originall designed to work point-to-point it can be used with VANs as well.
+
+Created in 1986, it was used for EDI between two business partners. Today it is mostly used by European car manufacturers. 
+
+### What does it have over OFTP1
+
+* Data compression
+* Exchange of digital certificates between trading partners
+* Handles massible files (>500 GB)
+* Support for additional character sets, such as Chinese and Japanese
 
 ## Overview
 
-Information is always exchanged between OFTP entities in a standard representation called a `Virtual File`. How the file is mapped from local to virtual depends will vary depending on the system. A virtual file is described by a set of attributes identifying and defining the data to be transferred
+Information is always exchanged between OFTP entities in a standard representation called a `Virtual File`. How the file is mapped from local to virtual depends will vary depending on the system. A virtual file is described by a set of attributes identifying and defining the data to be transferred. 
+
+A single OFTP entity can make and receive calls, exchanging files in both directions. This means that OFTP2 can work in a `PULL` or `PUSH` mode, as opposed to AS2, which can only use `PUSH`
 
 The specification is defined by going through the different "layers" or "services". Below is a short description of the layers and visualization of the structure of OFTP:
 

@@ -6,11 +6,22 @@ tags:
 ---
 
 # Working with Docker
-> Docker is a set of platform-as-a-service products that use OS-level virtualization to deliver software in packages called containers.  A container is a standardized unit of software.
+>Docker, inc. is the name of the company
 
-Docker is an open platform for developing, shipping, and running applications. It provides the ability to to package and run an application in an isolated environment. It enables you to separate your applications from your infrastructure so you can deliver software quickly.
+Docker is a set of products that use OS-level virtualization to deploy software in packages called containers. The products provide a way for creating, customizing, and orchestrating containers on a network.
+
+One thing to chant in your mind as you read: A container is a standardized unit of software.
 
 There are two types of containers: Windows and Linux containers. Both are still actively developed and evolving rapidly. 
+
+For more orchestration and management company examples see:
+https://landscape.cncf.io/
+
+### Background
+
+2013 open source project called `dot cloud` became a hit.
+
+Docker is an open platform for developing, shipping, and running applications. It provides the ability to to package and run an application in an isolated environment. It enables you to separate your applications from your infrastructure so you can deliver software quickly.
 
 ## Docker Engine
 
@@ -79,7 +90,7 @@ From the perspective of a running container, the underlying image it was started
 
 How do you get into the container once its started? SSH servers are not necessary. 
 
-**Option 1** is to call `docker run` and specify the `--tty` and `--interactive` options and specify an alternate command. The specified command will overwrite the `CMD` specified in the dockerfile.
+**Option 1** is to create an entirely new container with `docker run` and specify the `--tty` and `--interactive` options and specify an alternate command. The specified command will overwrite the `CMD` specified in the dockerfile.
 
 ```
 docker container run -it --name test nginx bash
@@ -194,7 +205,7 @@ This is particularly useful in situations where you just want to save the files 
 
 ### Working with Networks
 
-You can't assume from minute to minute the ip addresses of the containers on Docker's private network to stay the same as containers are created and destroted. That is why automatic DNS name resolution is a big deal. Virtual networks can be created like this:
+You can't assume from minute to minute the ip addresses of the containers on Docker's private network to stay the same as containers are created and destroyed. That is why automatic DNS name resolution is a big deal. Virtual networks can be created like this:
 
 ```
 docker network create my_app_net
