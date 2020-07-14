@@ -158,6 +158,16 @@ The results of undefined behavir are not predictable and may be very unpleasant.
 
 Not a language element in C++. This generally talks about a function's name and signature, about the accessible elements of a class (e.g. a class's "public interface", "protected interface", or "private interface") or about the expressions that must be valid for a template's type parameter. Interfaces are a fairly general design idea.
 
+They can be implemented in C++ with a `pure virtual base class`, which is one where every member function is declared as virtual. This can be useful as a list of requirements for subclasses to implement. 
+
+```c++
+class Shape {
+  virtual double area() const = 0;
+  virtual double perimeter() const = 0;
+  virtual int sides() const = 0;
+}
+
+```
 
 ## Naming 
 

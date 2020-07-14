@@ -142,6 +142,7 @@ docker container run ... -v /Users/reese/stuff:/path/container
 **Windows**
 ```
 docker container run ... -v //c/Users/reese/stuff:/path/container
+docker container run ... --mount type=bind,source=C:\temp,target=/builds 
 ```
 
 Basically just two locations pointing to the same file(s). Skips the union filesystem and host files overwrite any in the container. In the docker run command, you can use the keywords `$(pwd)` on linux or `${pwd}` on Windows on the left side of the `--volume` option

@@ -45,3 +45,19 @@ In IIS 6.0 and earlier, ASP.NET was implemented as an IIS ISAPI extension. The m
 Runtime Integration. IIS and ASP.NET can use the same configuration to enable and order server modules as well as configure handler mappings. 
 
 ![Integrated Mode](/resources/iis-integrated-mode.png)
+
+## Add TLS client authentication support
+
+It is pretty simple to add TLS client authentication support in IIS. First, you will need to have already created a website. 
+
+If your website has subapplications within it and a user connecting to your site should have authorization to access all the subapplications, decide to configure the website at the global level. Subapplications themselves can also contain different TLS client authentication configuration.
+
+At the website level, make sure you have a binding for traffic on port 443. In the Manage Website dropdown on the right pane, click `Advanced Settings...` and enable `https` protocol. 
+
+In the `SSL Settings` widget you can `require` client certificates to turn on TLS client authentication only.
+
+You will need to set 
+```
+system.webServer/security/authentication/clientCertificateMappingAuthentication
+``` 
+to **True** for the default client certificate mapping settings. This will actually authorize users to view your web application based on the certificate they provided. The customer will need to add in their own `iisClientCertificateMappingAuthentication` tag to use their own behavior.

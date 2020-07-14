@@ -82,7 +82,7 @@ Grouping with curly braces is usually done when substitutions on the argument mu
 set i 1; while $i<=10 {incr i}
 ```
 
-The reason is that the Tcl interpreter will substitute for `$i` *before* `while` is called.
+The reason is that the Tcl interpreter will substitute for `$i` *before* `while` is called. 1 will always be less than 10.
 
 #### Square Brackets do not Group
 
@@ -147,7 +147,7 @@ A procedure can take a variable number of arguments by specifying the `args` key
 `expr` parses and evaluates math functions. It operates more efficiently if the arguments are grouped.
 ```tcl
 set x 7
-set len [expr {[string length foobar] + 7]}
+set len [expr {[string length foobar] + 7}]
 => 13
 ```
 

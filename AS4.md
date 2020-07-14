@@ -6,7 +6,7 @@ tags:
 
 # Applicability Statement 4 (AS4)
 
-> AS4 is an open standard for the secure and payload-agnostic exchange of business-to-business documents using web services. It's a web-services upate to AS2, built largely on the OASIS ebMS 3.0 framework.
+> AS4 is an open standard for the secure and payload-agnostic exchange of business-to-business documents using web services. It's a web-services update to AS2, built largely on the OASIS ebMS 3.0 framework.
 
 Its lightweight nature makes it a relatively low-cost communications standard to implement for organizations with minimal IT infrastructure. AS4 is a SOAP-based web API layered over HTTP from a technical viewpoint and can be EDI from a business viewpoint.
 
